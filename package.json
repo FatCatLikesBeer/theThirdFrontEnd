@@ -12,7 +12,8 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.744.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
