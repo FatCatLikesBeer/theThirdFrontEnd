@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
 
-import { UserListCard } from "./UserListCard";
+import avatarFormatter from "../library/avatarFormatter";
+import UserListCard from "./UserListCard";
 
-const avatarDefault = "http://my-bucket.mooo.com:9000/the-third/avatar.jpg";
-const avatarTemplate = "http://my-bucket.mooo.com:9000/the-third/";
-
-export const UserList = () => {
+export default function UserList() {
   const [userList, setUserList] = useState<any[]>([]);
 
   useEffect(() => {
@@ -19,15 +17,11 @@ export const UserList = () => {
     <div>
       {userList.map((elem) => {
 
-        let avatarLocation = avatarDefault;
-
-        if (elem.avatar) {
-          avatarLocation = `${avatarTemplate}${elem.avatar}.jpg`;
-        }
+        let avatar = avatarFormatter(elem.avatar);
 
         return (
           <UserListCard handle={elem.handle}
-            avatar={avatarLocation}
+            avatar={avatar}
             displayName={elem.display_name}
             uuid={elem.uuid}
             key={Math.floor(Math.random() * 10000000)} />

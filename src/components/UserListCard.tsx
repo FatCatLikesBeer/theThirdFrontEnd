@@ -1,29 +1,42 @@
 import { useRef, useEffect } from "react";
+import { CSSProperties } from "react";
 
-export const UserListCard = (props: any) => {
-  const refDiv = useRef<HTMLDivElement>(null);
+export default function UserListCard(props: any) {
+  const cardRef = useRef<HTMLDivElement>(null);
   const handle = props.handle;
   const avatar = props.avatar;
   const uuid = props.uuid;
   const displayName = props.displayName;
 
   function handleClick() {
-    console.log(`${handle} has been clicked!`);
+    window.location.href = `/users/${uuid}`;
   }
 
   useEffect(() => {
-    refDiv.current?.addEventListener("click", handleClick);
+    cardRef.current?.addEventListener("click", handleClick);
     return () => {
-      refDiv.current?.removeEventListener("click", handleClick);
+      cardRef.current?.removeEventListener("click", handleClick);
     }
   }, []);
 
   return (
-    <div ref={refDiv}>
-      <img src={avatar} />
-      <p>{uuid}</p>
-      <p>{displayName}</p>
-      <p>{handle}</p>
+    <div style={styles.cardContainer} ref={cardRef}>
+      <div>
+        <img className="user-avatar avatar-list" src={avatar} />
+      </div>
+      <div>
+        <p>@{handle}</p>
+        <p>{displayName}</p>
+      </div>
     </div>
   );
+}
+
+const styles: Record<string, CSSProperties> = {
+  cardContainer: {
+    display: "flex",
+    flexDirection: "row",
+    borderRadius: "0.6rem",
+    border: "red 2px solid"
+  }
 }
