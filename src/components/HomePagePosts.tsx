@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import HomePagePostCards from "./HomePagePostCards";
+import PostsListCard from "./PostCardsList";
 
 export default function HomePagePosts() {
   const [posts, setPosts] = useState<any[]>([null]);
@@ -27,10 +27,10 @@ export default function HomePagePosts() {
       </div>
       {posts[0]
         ?
-        posts.map((elem) => {
+        posts.map((elem: PostListData) => {
           return (
             <>
-              <HomePagePostCards
+              <PostsListCard
                 userUUID={elem.user_uuid}
                 userHandle={elem.handle}
                 userAvatar={elem.avatar}

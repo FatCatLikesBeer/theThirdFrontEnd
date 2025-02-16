@@ -33,8 +33,8 @@ const styles: Record<string, CSSProperties> = {
 
 export default App
 
+// TODO: find icons (likes, comments, share, post, delete, options)
 // TODO: Maybe work on types and/or zod schemas?
 // TODO: figure out why you have a JWT in frontend
 // TODO: configure proxy pathing for development (frontend and backend should both point to 5173)
 // TODO: sidebar should be static/absolute
-// TODO: find icons (likes, comments, share, post, delete, options)
