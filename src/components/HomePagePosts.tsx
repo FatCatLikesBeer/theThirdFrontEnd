@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import PostsListCard from "./PostCardsList";
 
 export default function HomePagePosts() {
-  const [posts, setPosts] = useState<any[]>([null]);
+  const [posts, setPosts] = useState<PostListData[] | null>(null);
 
   useEffect(() => {
     fetch("http://localhost:3000/api/posts")
@@ -25,23 +25,22 @@ export default function HomePagePosts() {
       <div className="home-post-input">
         <p>Post input should go here</p>
       </div>
-      {posts[0]
+      {posts
         ?
         posts.map((elem: PostListData) => {
           return (
-            <>
-              <PostsListCard
-                userUUID={elem.user_uuid}
-                userHandle={elem.handle}
-                userAvatar={elem.avatar}
-                userDisplayName={elem.display_name}
-                postUUID={elem.post_uuid}
-                postTime={elem.created_at}
-                postContent={elem.content}
-                likeCount={elem.like_count}
-                commentCount={elem.comment_count}
-              />
-            </>
+            <PostsListCard
+              key={Math.floor(Math.random() * 10000000)}
+              userUUID={elem.user_uuid}
+              userHandle={elem.handle}
+              userAvatar={elem.avatar}
+              userDisplayName={elem.display_name}
+              postUUID={elem.post_uuid}
+              postTime={elem.created_at}
+              postContent={elem.content}
+              likeCount={elem.like_count}
+              commentCount={elem.comment_count}
+            />
           );
         })
         :

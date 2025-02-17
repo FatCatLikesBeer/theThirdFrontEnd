@@ -1,3 +1,8 @@
+:root {
+  --panel-radius: 50%;
+  --panel-min-height: 42px;
+}
+
 body {
   background-color: black;
   color: white;
@@ -17,7 +22,7 @@ body {
 }
 
 .avatar-detail {
-  height: 25rem;
+  height: 15rem;
 }
 
 .avatar-list {
@@ -27,4 +32,36 @@ body {
 .home-post-input {
   border: solid 2px red;
   border-radius: 0.5rem;
+}
+
+.reaction-panel {
+  display: flex;
+  flex-direction: row;
+}
+
+.reaction-panel > * {
+  padding: 0.5rem 0.4rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  min-width: 2rem;
+}
+
+.reaction-likes > *, .reaction-comments > * {
+  margin: 0 0.2rem 0;
+  align-content: center;
+}
+
+.reaction-likes {
+  border: 1px solid white;
+  border-right: none;
+  border-top-left-radius: var(--panel-min-height);
+  border-bottom-left-radius: var(--panel-min-height);
+}
+
+.reaction-comments {
+  border: 1px solid white;
+  border-left : none;
+  border-top-right-radius: var(--panel-min-height);
+  border-bottom-right-radius: var(--panel-min-height);
 }

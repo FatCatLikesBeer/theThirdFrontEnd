@@ -1,8 +1,9 @@
 import { Link } from 'react-router';
 
 import avatarFormatter from "../library/avatarFormatter";
-
 import dateFormatter from "../library/dateFormatter";
+
+import ReactionPanel from './icons/ReactionPanel';
 
 export default function PostsListCard({
   userUUID,
@@ -41,8 +42,7 @@ export default function PostsListCard({
       }
       <p>{date}</p>
       <p>{postContent}</p>
-      <p>likes: {likeCount}</p>
-      <p>comments: {commentCount}</p>
+      <ReactionPanel size={20} likeCount={likeCount} commentCount={commentCount} />
     </div>
   );
 }

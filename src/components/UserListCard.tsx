@@ -1,34 +1,24 @@
-import { useRef, useEffect } from "react";
 import { CSSProperties } from "react";
+import { Link } from "react-router";
 
 export default function UserListCard(props: any) {
-  const cardRef = useRef<HTMLDivElement>(null);
   const handle = props.handle;
   const avatar = props.avatar;
   const uuid = props.uuid;
   const displayName = props.displayName;
 
-  function handleClick() {
-    window.location.href = `/users/${uuid}`;
-  }
-
-  useEffect(() => {
-    cardRef.current?.addEventListener("click", handleClick);
-    return () => {
-      cardRef.current?.removeEventListener("click", handleClick);
-    }
-  }, []);
-
   return (
-    <div style={styles.cardContainer} ref={cardRef}>
-      <div>
-        <img className="user-avatar avatar-list" src={avatar} />
+    <Link to={`/users/${uuid}`}>
+      <div style={styles.cardContainer}>
+        <div>
+          <img className="user-avatar avatar-list" src={avatar} />
+        </div>
+        <div>
+          <p>@{handle}</p>
+          <p>{displayName}</p>
+        </div>
       </div>
-      <div>
-        <p>@{handle}</p>
-        <p>{displayName}</p>
-      </div>
-    </div>
+    </Link>
   );
 }
 
