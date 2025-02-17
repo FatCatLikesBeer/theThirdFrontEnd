@@ -5,10 +5,13 @@ import ChatIcon from "./ChatIcon";
 
 /**
  * ReactionPanel component
+ * Displays likes & comment count
  * @prop {number} size - size of like & comment icons, default 16
- * @prop {number} likeCount
- * @prop {number} commentCount
+ * @prop {number | undefined | null} likeCount
+ * @prop {number | undefined | null} commentCount
  * @prop {boolean} likeFill - fill thumbs up, default false
+ * @prop {callback} likeCallback - action when like section is pressed
+ * @prop {callback} commentCallback - action when comment section is pressed
  */
 export default function ReactionPanel({
   size = 16,
@@ -19,14 +22,16 @@ export default function ReactionPanel({
   commentCallback,
 }: {
   size?: number;
-  likeCount: number;
-  commentCount: number;
+  likeCount: number | undefined | null;
+  commentCount: number | undefined | null;
   likeFill?: boolean;
   likeCallback: () => void;
   commentCallback: () => void;
 }) {
   const likeRef = useRef<HTMLDivElement | null>(null);
   const commentRef = useRef<HTMLDivElement | null>(null);
+  likeCount = likeCount || 0;
+  commentCount = commentCount || 0;
 
   useEffect(() => {
     likeRef.current?.addEventListener("click", likeCallback);

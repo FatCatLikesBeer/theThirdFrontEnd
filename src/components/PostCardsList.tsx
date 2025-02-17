@@ -29,8 +29,10 @@ export default function PostsListCard({
 
   const avatar = avatarFormatter(userAvatar);
   const date = dateFormatter(postTime);
-  function handleComment() { window.open(`/posts/${postUUID}`) }
-
+  function handleComment() { window.open(`/posts/${postUUID}`, "_self") }
+  function handleLike() {
+    // requires auth
+  }
 
   return (
     <div className="post-card-list-container">

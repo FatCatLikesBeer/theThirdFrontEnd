@@ -10,13 +10,37 @@ type UserDetailData = {
 }
 
 type PostListData = {
+  avatar: string;
+  comment_count: number;
+  content: string;
+  created_at: string;
+  display_name: string;
+  handle: string;
+  like_count: number;
+  post_uuid: string;
+  user_uuid: string;
+}
+
+type PostDetailData = {
+  avatar: string;
+  comment_count: number;
+  content: string;
+  created_at: string;
+  display_name: string;
+  handle: string;
+  like_count: number;
+  post_uuid: string;
+  user_uuid: string;
+  comments: string;
+  parsed_comments: PostComments[] | null;
+}
+
+type PostComments = {
+  comment_uuid: string;
+  content: string;
+  created_at: string;
   user_uuid: string;
   handle: string;
   avatar: string;
-  display_name: string;
-  post_uuid: string;
-  created_at: string;
-  content: string;
-  like_count: number;
-  comment_count: number;
+  likes: number;
 }
