@@ -29,6 +29,8 @@ export default function PostsListCard({
 
   const avatar = avatarFormatter(userAvatar);
   const date = dateFormatter(postTime);
+  function handleComment() { window.open(`/posts/${postUUID}`) }
+
 
   return (
     <div className="post-card-list-container">
@@ -42,7 +44,14 @@ export default function PostsListCard({
       }
       <p>{date}</p>
       <p>{postContent}</p>
-      <ReactionPanel size={20} likeCount={likeCount} commentCount={commentCount} />
+      <ReactionPanel
+        size={20}
+        likeCount={likeCount}
+        commentCount={commentCount}
+        likeFill={false}
+        likeCallback={(): any => { console.log("Like as been pressed") }}
+        commentCallback={handleComment}
+      />
     </div>
   );
 }

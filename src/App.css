@@ -1,6 +1,7 @@
 :root {
   --panel-radius: 50%;
   --panel-min-height: 42px;
+  font-family: sans-serif, "Helvetica";
 }
 
 body {
@@ -64,4 +65,8 @@ body {
   border-left : none;
   border-top-right-radius: var(--panel-min-height);
   border-bottom-right-radius: var(--panel-min-height);
+}
+
+.panel-icon-comment {
+  margin-right: 0.4rem;
 }

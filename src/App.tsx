@@ -2,6 +2,7 @@ import './App.css'
 
 // import Header from "./components/Header.tsx"
 // import PostInput from './components/PostInput.tsx';
+import PageNotFound from './components/PageNotFound.tsx';
 import SideBar from './components/SideBar.tsx';
 import UserList from './components/UserList.tsx'
 import UserDetail from './components/UserDetail.tsx';
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element={<HomePagePosts />} />
           <Route path="/users" element={<UserList />} />
           <Route path="/users/:uuid" element={<UserDetail />} />
+          <Route path="/*" element={<PageNotFound />} />
         </Routes>
       </div>
     </>
