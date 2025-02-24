@@ -26,18 +26,13 @@ export default function PostDetail() {
           const newPost: PostDetailData = { ...json.data }
           newPost.created_at = dateFormatter(newPost.created_at);
           newPost.avatar = avatarFormatter(newPost.avatar);
-          if (JSON.parse(newPost.comments)[0].comment_uuid != undefined) {
-            newPost.parsed_comments = JSON.parse(newPost.comments);
-            newPost.parsed_comments?.forEach((elem, i) => {
-              if (newPost.parsed_comments != null) {
-                // The above conditional exists to get TS linter to shut up
-                newPost.parsed_comments[i].avatar = avatarFormatter(elem.avatar);
-                newPost.parsed_comments[i].created_at = dateFormatter(elem.created_at);
-              }
-            });
-          } else {
-            newPost.parsed_comments = null;
-          }
+
+          newPost.comments = newPost.comments.map(elem => {
+            elem.avatar = avatarFormatter(elem.avatar);
+            elem.created_at = dateFormatter(elem.avatar);
+            return elem;
+          });
+
           setPost({ ...newPost });
         } else {
           console.error(json);
@@ -62,16 +57,21 @@ export default function PostDetail() {
             likeCallback={() => { }}
             commentCallback={() => { }}
           />
-          {post?.parsed_comments?.map((elem) => {
-            return (
-              <div className="post-detail-comment-container" key={Math.floor(Math.random() * 10000000)}>
-                <img className="user-avatar avatar-list" src={elem.avatar} />
-                <p>{elem.handle}</p>
-                <p>{elem.content}</p>
-                <ReactionPanel likeCount={elem.likes} commentCount={null} likeCallback={() => { }} commentCallback={() => { }} />
-              </div>
-            );
-          })}
+          {post.comments[0].comment_uuid != null
+            ?
+            post?.comments?.map((elem) => {
+              return (
+                <div className="post-detail-comment-container" key={Math.floor(Math.random() * 10000000)}>
+                  <img className="user-avatar avatar-list" src={elem.avatar} />
+                  <p>{elem.handle}</p>
+                  <p>{elem.content}</p>
+                  <ReactionPanel likeCount={elem.likes} commentCount={null} likeCallback={() => { }} commentCallback={() => { }} />
+                </div>
+              );
+            })
+            :
+            ""
+          }
         </div>
         :
         <PageNotFound />

@@ -31,8 +31,7 @@ type PostDetailData = {
   like_count: number;
   post_uuid: string;
   user_uuid: string;
-  comments: string;
-  parsed_comments: PostComments[] | null;
+  comments: PostComments[];
 }
 
 type PostComments = {

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
 import PostsListCard from "./PostCardsList";
+import HomePageInput from "./HomePageInput";
 
 export default function HomePagePosts() {
   const [posts, setPosts] = useState<PostListData[] | null>(null);
@@ -22,9 +23,7 @@ export default function HomePagePosts() {
 
   return (
     <div className="home-page-posts">
-      <div className="home-post-input">
-        <p>Post input should go here</p>
-      </div>
+      <HomePageInput />
       {posts
         ?
         posts.map((elem: PostListData) => {

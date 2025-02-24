@@ -36,7 +36,7 @@ export default function PostsListCard({
 
   return (
     <div className="post-card-list-container">
-      <img className="user-avatar avatar-list" src={avatar} />
+      <img className="user-avatar avatar-list" src={avatar} alt={`Avatar for user ${userHandle}`} />
       <Link to={`/users/${userUUID}`}><p>{userHandle}</p></Link>
       {userDisplayName != undefined
         ?

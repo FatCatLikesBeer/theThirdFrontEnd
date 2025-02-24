@@ -30,11 +30,6 @@ body {
   height: 4rem;
 }
 
-.home-post-input {
-  border: solid 2px red;
-  border-radius: 0.5rem;
-}
-
 .reaction-panel {
   display: flex;
   flex-direction: row;
@@ -69,4 +64,37 @@ body {
 
 .panel-icon-comment {
   margin-right: 0.4rem;
+}
+
+.create-post-container {
+  border: solid 1px grey;
+  border-radius: 0.5rem;
+  margin: 2rem 0;
+  max-width: 28rem;
+}
+
+.create-post-title {
+  margin: 0;
+  padding: 0.6rem;
+  border-bottom: solid 1px grey;
+  text-align: center;
+}
+
+.create-post-input-container {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+}
+
+.create-post-input-element {
+  background-color: black;
+  border: none;
+  height: 8rem;
+  resize: none;
+}
+
+.create-post-submit-button {
+  margin: 0.2rem 0;
+  padding: 0.5rem 1rem;
+  border-radius: 100000px;
 }
