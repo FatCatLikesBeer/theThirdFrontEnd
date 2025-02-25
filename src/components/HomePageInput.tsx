@@ -1,6 +1,8 @@
-import { useState, useEffect, useRef, ChangeEvent } from "react";
+import AuthContext from "../context/AuthContext";
+import { useState, useEffect, useRef, useContext, ChangeEvent } from "react";
 
 export default function HomePageInput() {
+  const { auth, setAuth } = useContext(AuthContext);
   const [inputValue, setInputValue] = useState("");
   const divRef = useRef<null | HTMLDivElement>(null);
   const inputRef = useRef<null | HTMLTextAreaElement>(null);
@@ -11,9 +13,8 @@ export default function HomePageInput() {
   }
 
   function handleClick() {
-    const hello = document.createElement("p");
-    hello.innerText = "hello";
-    divRef.current?.appendChild(hello);
+    setAuth(`${auth} hello`);
+    console.log(auth);
   }
 
   useEffect(() => {

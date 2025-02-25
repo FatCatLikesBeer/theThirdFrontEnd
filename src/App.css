@@ -1,12 +1,14 @@
 :root {
   --panel-radius: 50%;
   --panel-min-height: 42px;
-  font-family: sans-serif, "Helvetica";
+  --color: black;
 }
 
 body {
-  background-color: black;
-  color: white;
+  font-family: sans-serif, "Helvetica";
+  color: black;
+  background-color: white;
+  margin: 0;
 }
 
 .sidebar-margin-border-padding {
@@ -49,14 +51,14 @@ body {
 }
 
 .reaction-likes {
-  border: 1px solid white;
+  border: 1px solid var(--color);
   border-right: none;
   border-top-left-radius: var(--panel-min-height);
   border-bottom-left-radius: var(--panel-min-height);
 }
 
 .reaction-comments {
-  border: 1px solid white;
+  border: 1px solid var(--color);
   border-left : none;
   border-top-right-radius: var(--panel-min-height);
   border-bottom-right-radius: var(--panel-min-height);
@@ -87,7 +89,7 @@ body {
 }
 
 .create-post-input-element {
-  background-color: black;
+  background-color: white;
   border: none;
   height: 8rem;
   resize: none;
@@ -97,4 +99,43 @@ body {
   margin: 0.2rem 0;
   padding: 0.5rem 1rem;
   border-radius: 100000px;
+  border: solid grey 1px;
+}
+
+.auth-modal-container {
+  padding: 8px;
+  border: solid grey 1px;
+  border-radius: 0.5rem;
+}
+
+.auth-modal-content {
+  margin: 8px;
+  width: 20rem;
+}
+
+.auth-login-signup-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-form-title {
+  margin: 0;
+  text-align: center;
+}
+
+.auth-form-input {
+  border: solid grey 1px;
+  border-radius: 0.5rem;
+  padding: 0.3rem;
+}
+
+.auth-form-label {
+  font-size: 0.8rem;
+  height: 1rem;
+  margin-bottom: 4px;
+}
+
+
+.auth-form-error {
+  color: red;
 }

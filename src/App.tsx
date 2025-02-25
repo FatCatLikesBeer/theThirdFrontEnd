@@ -1,4 +1,6 @@
+import { useState, useRef } from 'react';
 import './App.css'
+import AuthContext from './context/AuthContext.tsx';
 
 // import Header from "./components/Header.tsx"
 // import PostInput from './components/PostInput.tsx';
@@ -7,15 +9,24 @@ import SideBar from './components/SideBar.tsx';
 import UserList from './components/UserList.tsx'
 import UserDetail from './components/UserDetail.tsx';
 import PostDetail from './components/PostDetail.tsx';
+import HomePagePosts from './components/HomePagePosts.tsx';
+import AuthModal from './components/AuthModal.tsx';
 import { Route, Routes } from 'react-router';
 import { CSSProperties } from "react";
-import HomePagePosts from './components/HomePagePosts.tsx';
 
 function App() {
+  const modalRef = useRef<null | HTMLDialogElement>(null);
+  const [auth, setAuth] = useState<any>();
+
+  function handleClick() {
+    modalRef.current?.showModal();
+  }
+
   return (
-    <>
+    <AuthContext value={{ auth, setAuth }}>
       <div style={styles.container}>
-        <SideBar />
+        <AuthModal modalRef={modalRef} />
+        <SideBar handleShowModal={handleClick} />
         <Routes>
           <Route path="/" element={<HomePagePosts />} />
           <Route path="/users" element={<UserList />} />
@@ -24,7 +35,7 @@ function App() {
           <Route path="/*" element={<PageNotFound />} />
         </Routes>
       </div>
-    </>
+    </AuthContext>
   )
 }
 
