@@ -13,8 +13,6 @@ export default function HomePageInput() {
   }
 
   function handleClick() {
-    setAuth(`${auth} hello`);
-    console.log(auth);
   }
 
   useEffect(() => {

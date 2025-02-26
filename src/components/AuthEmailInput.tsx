@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const emailSchema = z.string().email();
 const apiURL = String(import.meta.env.VITE_API_URL) + "/api/auth";
@@ -7,7 +7,11 @@ const apiURL = String(import.meta.env.VITE_API_URL) + "/api/auth";
 /**
  * AuthEmailInput
  */
-export default function AuthEmailInput() {
+export default function AuthEmailInput({
+  modalRef,
+}: {
+  modalRef: React.RefObject<HTMLDialogElement | null>;
+}) {
   const [email, setEmail] = useState<string>("");
   const [emailInputHasBeenFocused, setEmailInputHasBeenFocused] = useState(false);
   const emailValidation = emailSchema.safeParse(email);
@@ -16,10 +20,32 @@ export default function AuthEmailInput() {
     setEmail(e.target.value);
   }
 
-  function handleClick() {
+  async function handleClick() {
     const formattedURL = apiURLFormatter(email);
-    console.log(formattedURL);
+    fetch(formattedURL, {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json()
+        }
+      })
+      .then((json) => {
+        console.log(json);
+      });
   }
+
+  useEffect(() => {
+    function handleModalClose() {
+      setEmail("");
+    }
+
+    modalRef?.current?.addEventListener("close", handleModalClose);
+    return (() => {
+      modalRef?.current?.removeEventListener("close", handleModalClose);
+    });
+  }, []);
 
   return (
     <div className="auth-login-signup-container">

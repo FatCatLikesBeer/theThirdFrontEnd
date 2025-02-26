@@ -24,7 +24,7 @@ export default function AuthModal({
     <dialog ref={modalRef} className="auth-modal-container">
       <CloseIcon size={20} ref={closeButtonRef} />
       <div className="auth-modal-content">
-        <AuthEmailInput />
+        <AuthEmailInput modalRef={modalRef} />
       </div>
     </dialog>
   );
