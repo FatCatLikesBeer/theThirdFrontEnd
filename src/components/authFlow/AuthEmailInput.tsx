@@ -1,5 +1,7 @@
 import { z } from "zod";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+
+import AuthModalContext from "../../context/AuthModalContext";
 
 const emailSchema = z.string().email();
 const apiURL = String(import.meta.env.VITE_API_URL) + "/api/auth";
@@ -7,13 +9,19 @@ const apiURL = String(import.meta.env.VITE_API_URL) + "/api/auth";
 /**
  * AuthEmailInput
  */
-export default function AuthEmailInput({
-  modalRef,
-}: {
-  modalRef: React.RefObject<HTMLDialogElement | null>;
-}) {
+export default function AuthEmailInput(
+  {
+    setIsUser, setUserEmail
+  }: {
+    setIsUser: React.Dispatch<React.SetStateAction<boolean | null>>;
+    setUserEmail: React.Dispatch<React.SetStateAction<string | null>>
+  }
+) {
+  const modalRef = useContext(AuthModalContext) as React.RefObject<HTMLDialogElement>;
+  const [authFormError, setAuthFormError] = useState<string>("Invalid Email");
   const [email, setEmail] = useState<string>("");
   const [emailInputHasBeenFocused, setEmailInputHasBeenFocused] = useState(false);
+  const [submitHasBeenClicked, setSubmitHasBeenClicked] = useState(false);
   const emailValidation = emailSchema.safeParse(email);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -21,6 +29,7 @@ export default function AuthEmailInput({
   }
 
   async function handleClick() {
+    setSubmitHasBeenClicked(true);
     const formattedURL = apiURLFormatter(email);
     fetch(formattedURL, {
       method: "GET",
@@ -28,19 +37,23 @@ export default function AuthEmailInput({
     })
       .then((response) => {
         if (response.ok) {
-          return response.json()
+          return response.json();
+        } else {
+          setAuthFormError("Server error 😩");
         }
       })
       .then((json) => {
         console.log(json);
+        const isUser = json.data.isUser;
+        const message = json.data.message;
+        setIsUser(isUser);
+        setUserEmail(email);
+        setAuthFormError(message);
       });
   }
 
   useEffect(() => {
-    function handleModalClose() {
-      setEmail("");
-    }
-
+    function handleModalClose() { setEmail("") }
     modalRef?.current?.addEventListener("close", handleModalClose);
     return (() => {
       modalRef?.current?.removeEventListener("close", handleModalClose);
@@ -62,7 +75,7 @@ export default function AuthEmailInput({
       />
       {emailInputHasBeenFocused && !emailValidation.success
         ?
-        <p className="auth-form-label auth-form-error">Email invalid</p>
+        <p className="auth-form-label auth-form-error">{authFormError}</p>
         :
         <p className="auth-form-label auth-form-error"></p>
       }
@@ -70,7 +83,13 @@ export default function AuthEmailInput({
         className="create-post-submit-button"
         type="button"
         disabled={!emailValidation.success}
-        onClick={handleClick}>Submit</button>
+        onClick={handleClick}>{
+          submitHasBeenClicked
+            ?
+            <div className="spinner" />
+            :
+            "Submit"
+        }</button>
     </div>
   );
 }

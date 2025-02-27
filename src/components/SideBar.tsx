@@ -3,14 +3,13 @@ import { Link } from "react-router";
 
 import AuthContext from "../context/AuthContext";
 
-export default function SideBar(
-  {
-    handleShowModal,
-  }: {
-    handleShowModal: () => void;
-  }
-) {
+export default function SideBar({ loginSignupCallback }: { loginSignupCallback: () => void }) {
   const { auth } = useContext(AuthContext);
+
+  function logoutCallback() {
+    // remove auth from state, local storage, and cookie
+    console.log("Logout not yet implemented");
+  }
 
   return (
     <div className="sidebar-margin-border-padding">
@@ -23,9 +22,9 @@ export default function SideBar(
       <p>Settings</p>
       {auth
         ?
-        <p>Logout</p>
+        <p><a onClick={logoutCallback}>Logout</a></p>
         :
-        <p><a onClick={handleShowModal}>Login/Signup</a></p>
+        <p><a onClick={loginSignupCallback}>Login/Signup</a></p>
       }
     </div>
   );

@@ -1,5 +1,7 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import './App.css'
+
+import AuthModalContext from './context/AuthModalContext.tsx';
 import AuthContext from './context/AuthContext.tsx';
 
 // import Header from "./components/Header.tsx"
@@ -18,25 +20,31 @@ function App() {
   const modalRef = useRef<null | HTMLDialogElement>(null);
   const [auth, setAuth] = useState<any>();
 
-  function handleClick() {
+  function loginSignupCallback() {
     modalRef.current?.showModal();
   }
 
+  useEffect(() => {
+    console.log(auth);
+  });
+
   return (
-    <AuthContext value={{ auth, setAuth }}>
-      <div style={styles.container}>
-        <AuthModal modalRef={modalRef} />
-        <SideBar handleShowModal={handleClick} />
-        <Routes>
-          <Route path="/" element={<HomePagePosts />} />
-          <Route path="/users" element={<UserList />} />
-          <Route path="/users/:uuid" element={<UserDetail />} />
-          <Route path="/posts/:uuid" element={<PostDetail />} />
-          <Route path="/*" element={<PageNotFound />} />
-        </Routes>
-      </div>
-    </AuthContext>
-  )
+    <AuthModalContext value={modalRef as React.RefObject<HTMLDialogElement>}>
+      <AuthContext value={{ auth, setAuth }}>
+        <div style={styles.container}>
+          <AuthModal />
+          <SideBar loginSignupCallback={loginSignupCallback} />
+          <Routes>
+            <Route path="/" element={<HomePagePosts />} />
+            <Route path="/users" element={<UserList />} />
+            <Route path="/users/:uuid" element={<UserDetail />} />
+            <Route path="/posts/:uuid" element={<PostDetail />} />
+            <Route path="/*" element={<PageNotFound />} />
+          </Routes>
+        </div>
+      </AuthContext>
+    </AuthModalContext>
+  );
 }
 
 const styles: Record<string, CSSProperties> = {
