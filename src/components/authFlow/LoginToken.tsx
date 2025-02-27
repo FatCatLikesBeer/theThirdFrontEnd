@@ -9,10 +9,11 @@ const apiURL = String(import.meta.env.VITE_API_URL) + "/api/auth";
 
 /**
  * LoginToken
- * @description confirms email & token, sets auth to app and local storage
+ * @description confirms email & token for login,
+ * sets auth to app and local storage
  */
 export default function LoginToken({ email }: { email: string }) {
-  const { setAuth } = useContext(AuthContext);
+  const { setUUID } = useContext(AuthContext);
   const modalRef = useContext(AuthModalContext) as React.RefObject<HTMLDialogElement>;
   const [authFormError, setAuthFormError] = useState<string>("Invalid Token");
   const [token, setToken] = useState("");
@@ -40,7 +41,7 @@ export default function LoginToken({ email }: { email: string }) {
       })
       .then((json) => {
         console.log(json);
-        setAuth(json);
+        setUUID(json.data.uuid);
         localStorage.setItem("uuid", json.data.uuid);
         modalRef.current.close();
       });

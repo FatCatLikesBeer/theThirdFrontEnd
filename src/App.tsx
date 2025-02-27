@@ -18,19 +18,19 @@ import { CSSProperties } from "react";
 
 function App() {
   const modalRef = useRef<null | HTMLDialogElement>(null);
-  const [auth, setAuth] = useState<any>();
+  const [uuid, setUUID] = useState<string | null>(localStorage.getItem("uuid"));
 
   function loginSignupCallback() {
     modalRef.current?.showModal();
   }
 
   useEffect(() => {
-    console.log(auth);
+    console.log(uuid);
   });
 
   return (
     <AuthModalContext value={modalRef as React.RefObject<HTMLDialogElement>}>
-      <AuthContext value={{ auth, setAuth }}>
+      <AuthContext value={{ uuid, setUUID }}>
         <div style={styles.container}>
           <AuthModal />
           <SideBar loginSignupCallback={loginSignupCallback} />

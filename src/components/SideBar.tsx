@@ -4,11 +4,11 @@ import { Link } from "react-router";
 import AuthContext from "../context/AuthContext";
 
 export default function SideBar({ loginSignupCallback }: { loginSignupCallback: () => void }) {
-  const { auth } = useContext(AuthContext);
+  const { uuid } = useContext(AuthContext);
 
   function logoutCallback() {
-    // remove auth from state, local storage, and cookie
-    console.log("Logout not yet implemented");
+    localStorage.removeItem("uuid");
+    window.location.href = "/";
   }
 
   return (
@@ -20,7 +20,7 @@ export default function SideBar({ loginSignupCallback }: { loginSignupCallback: 
       <p>Friends</p>
       <p>Your Stuff</p>
       <p>Settings</p>
-      {auth
+      {uuid
         ?
         <p><a onClick={logoutCallback}>Logout</a></p>
         :

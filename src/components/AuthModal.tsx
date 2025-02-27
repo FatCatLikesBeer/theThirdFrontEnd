@@ -2,6 +2,7 @@ import { useEffect, useRef, useContext, useState } from "react";
 import CloseIcon from "./icons/CloseIcon";
 import AuthEmailInput from "./authFlow/AuthEmailInput";
 import LoginToken from "./authFlow/LoginToken.tsx";
+import SignupConfirmation from "./authFlow/SignupConfirmation.tsx";
 
 import AuthModalContext from "../context/AuthModalContext";
 
@@ -43,7 +44,7 @@ export default function AuthModal() {
             ?
             <LoginToken email={userEmail as string} />
             :
-            "Confirm signup -> Email confirmation"
+            <SignupConfirmation email={userEmail as string} />
         }
       </div>
     </dialog>

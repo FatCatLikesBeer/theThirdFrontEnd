@@ -2,7 +2,7 @@ import AuthContext from "../context/AuthContext";
 import { useState, useEffect, useRef, useContext, ChangeEvent } from "react";
 
 export default function HomePageInput() {
-  const { auth, setAuth } = useContext(AuthContext);
+  const { uuid } = useContext(AuthContext);
   const [inputValue, setInputValue] = useState("");
   const divRef = useRef<null | HTMLDivElement>(null);
   const inputRef = useRef<null | HTMLTextAreaElement>(null);

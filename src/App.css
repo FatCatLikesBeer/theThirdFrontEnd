@@ -2,6 +2,7 @@
   --panel-radius: 50%;
   --panel-min-height: 42px;
   --color: black;
+  --background-color: white;
 }
 
 @-webkit-keyframes spinner-border {
@@ -33,7 +34,7 @@
 body {
   font-family: sans-serif, "Helvetica";
   color: black;
-  background-color: white;
+  background-color: var(--background-color);
   margin: 0;
 }
 
@@ -167,6 +168,33 @@ body {
   margin: 0;
   padding: 0;
   text-align: center;
+}
+
+.auth-form-text-content {
+  font-size: 0.8rem;
+  margin: 16px auto;
+  width: 80%;
+  text-align: center;
+}
+
+.auth-form-email-display-container {
+  border-top: solid 1px grey;
+  border-bottom: solid 1px grey;
+}
+
+.auth-form-email-display {
+  text-align: center;
+  margin: 8px 0;
+}
+
+.auth-form-cancel-button {
+  font-size: x-small;
+  color: red;
+  text-align: center;
+  margin: 0.5rem;
+  background-color: var(--background-color);
+  border: none;
+  width: 3rem;
 }
 
 .auth-form-error {
