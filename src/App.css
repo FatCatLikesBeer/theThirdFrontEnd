@@ -1,7 +1,7 @@
 :root {
   --panel-radius: 50%;
   --panel-min-height: 42px;
-  --color: black;
+  --color: grey;
   --background-color: white;
 }
 
@@ -35,6 +35,25 @@ body {
   font-family: sans-serif, "Helvetica";
   color: black;
   background-color: var(--background-color);
+  margin: 0;
+}
+
+textarea:focus {
+  outline: none;
+  border: none;
+}
+
+.app-title {
+  margin: 0;
+}
+
+.app-tagline {
+  margin: 0 0 2rem;
+  color: grey;
+  font-size: small;
+}
+
+.page-title {
   margin: 0;
 }
 
@@ -199,4 +218,22 @@ body {
 
 .auth-form-error {
   color: red;
+}
+
+.app-full-page {
+  display: flex;
+  flex-direction: row;
+}
+
+.app-content-column {
+  width: 650px;
+  padding: 2rem;
+}
+
+.sidebar-create-post-button {
+  background-color: var(--background-color);
+  border: solid 1px grey;
+  border-radius: 100px;
+  margin: 0.2rem 0;
+  padding: 0.5rem 1rem;
 }

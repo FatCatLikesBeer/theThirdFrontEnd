@@ -24,7 +24,6 @@ export default function SignupToken({ email }: { email: string }) {
   const [forceError, setForceError] = useState(false);
   const modalRef = useContext(AuthModalContext);
 
-
   function handleConfirmButton() {
     setConfirmHasBeenClicked(true);
     setTimeout(() => {

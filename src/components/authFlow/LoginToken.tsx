@@ -65,7 +65,7 @@ export default function LoginToken({ email }: { email: string }) {
         type="text"
         className="auth-form-input"
         value={token}
-        placeholder="123455"
+        placeholder="123456"
         onChange={handleChange}
         onBlur={() => { setEmailInputHasBeenFocused(true) }}
         onFocus={() => { setEmailInputHasBeenFocused(false) }}
