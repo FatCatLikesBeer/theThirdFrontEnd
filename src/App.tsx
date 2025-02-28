@@ -1,8 +1,8 @@
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import './App.css'
 
-import AuthModalContext from './context/AuthModalContext.tsx';
 import AuthContext from './context/AuthContext.tsx';
+import AuthModalContext from './context/AuthModalContext.tsx';
 
 import PageNotFound from './components/PageNotFound.tsx';
 import SideBar from './components/SideBar.tsx';
@@ -19,12 +19,7 @@ function App() {
   const modalRef = useRef<null | HTMLDialogElement>(null);
   const [uuid, setUUID] = useState<string | null>(localStorage.getItem("uuid"));
 
-  function loginSignupCallback() {
-    modalRef.current?.showModal();
-  }
-
-  useEffect(() => {
-  });
+  function loginSignupCallback() { modalRef.current?.showModal() }
 
   return (
     <AuthModalContext value={modalRef as React.RefObject<HTMLDialogElement>}>

@@ -43,3 +43,20 @@ type PostComments = {
   avatar: string;
   likes: number;
 }
+
+type APIResponse<T> = {
+  success: boolean;
+  path: string;
+  message: string;
+  data: T;
+}
+
+type APIUserData = {
+  [about: string]: string,
+  [avatar: string]: string,
+  [created_at: string]: string,
+  [display_name: string]: string,
+  [email: string]: string,
+  [handle: string]: string,
+  [location: string]: string,
+}

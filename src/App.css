@@ -31,6 +31,10 @@
   animation: spinner-border .75s linear infinite;
 }
 
+svg {
+  vertical-align: -1px;
+}
+
 body {
   font-family: sans-serif, "Helvetica";
   color: black;
@@ -240,4 +244,10 @@ textarea:focus {
 
 .sidebar-selected {
   background-color: gold;
+}
+
+.settings-modal-container {
+  padding: 8px;
+  border: solid grey 1px;
+  border-radius: 0.5rem;
 }
