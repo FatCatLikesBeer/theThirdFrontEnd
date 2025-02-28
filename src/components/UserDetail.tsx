@@ -22,7 +22,6 @@ export default function UserDetail() {
         }
       })
       .then((json) => {
-        console.log("user", json);
         if (json.success) {
           const newUser = { ...json.data }
           newUser.avatar = avatarFormatter(newUser.avatar);
@@ -43,7 +42,6 @@ export default function UserDetail() {
         }
       })
       .then((json) => {
-        console.log("posts", json);
         if (json.success) {
           setPosts([...json.data]);
         } else {

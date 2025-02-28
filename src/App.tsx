@@ -12,6 +12,7 @@ import PostDetail from './components/PostDetail.tsx';
 import HomePagePosts from './components/HomePagePosts.tsx';
 import AuthModal from './components/AuthModal.tsx';
 import Settings from './components/Settings.tsx';
+import MyStuff from './components/MyStuff.tsx';
 import { Route, Routes } from 'react-router';
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
           <div className="app-content-column">
             <Routes>
               <Route path="/" element={<HomePagePosts />} />
+              <Route path="/mystuff" element={<MyStuff />} />
               <Route path="/users" element={<UserList />} />
               <Route path="/users/:uuid" element={<UserDetail />} />
               <Route path="/posts/:uuid" element={<PostDetail />} />
@@ -49,8 +51,8 @@ function App() {
 
 export default App
 
-// TODO: user detail should not include email unless it's the user themself
 // TODO: Add username selection for onboarding after signup
+// TODO: user detail should not include email unless it's the user themself
 // TODO: Settings page
 // TODO: Post input & create a post from UI
 // TODO: PageNotFound component should have a timer before it procs

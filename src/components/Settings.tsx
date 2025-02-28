@@ -28,6 +28,14 @@ export default function Settings() {
       });
   }, []);
 
+  // Onboarding
+  useEffect(() => {
+    if (!Boolean(Number(localStorage.getItem("onboarding")))) {
+      // open Settings edit modal
+      // you still need to create the modal, copy what you did with the auth modal
+    }
+  });
+
   return (
     <>
       {userData

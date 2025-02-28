@@ -237,3 +237,7 @@ textarea:focus {
   margin: 0.2rem 0;
   padding: 0.5rem 1rem;
 }
+
+.sidebar-selected {
+  background-color: gold;
+}

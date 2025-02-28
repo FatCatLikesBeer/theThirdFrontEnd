@@ -14,7 +14,6 @@ export default function HomePagePosts() {
         }
       })
       .then((json) => {
-        console.log(json);
         if (json.success) {
           setPosts([...json.data]);
         }

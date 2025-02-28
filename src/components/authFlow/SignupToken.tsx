@@ -43,6 +43,7 @@ export default function SignupToken({ email }: { email: string }) {
       .then(json => {
         if (json.success) {
           localStorage.setItem("uuid", json.data.uuid);
+          localStorage.setItem("onboarding", "0");
           setUUID(json.data.uuid);
           window.location.href = "/settings";
         } else {

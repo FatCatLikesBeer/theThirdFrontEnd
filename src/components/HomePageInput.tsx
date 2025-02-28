@@ -9,7 +9,6 @@ export default function HomePageInput() {
 
   function handleInput(event: ChangeEvent<HTMLTextAreaElement>) {
     setInputValue(event.target.value)
-    console.log(event.target.value);
   }
 
   function handleClick() {
