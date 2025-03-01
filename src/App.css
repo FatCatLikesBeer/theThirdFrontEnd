@@ -32,7 +32,11 @@
 }
 
 svg {
-  vertical-align: -1px;
+  vertical-align: -2px;
+}
+
+.confirmation-icons {
+  vertical-align: -4px;
 }
 
 body {
@@ -40,6 +44,10 @@ body {
   color: black;
   background-color: var(--background-color);
   margin: 0;
+}
+
+textarea {
+  font-family: sans-serif, "Helvetica";
 }
 
 textarea:focus {
@@ -251,3 +259,31 @@ textarea:focus {
   border: solid grey 1px;
   border-radius: 0.5rem;
 }
+
+.edit-icon {
+  cursor: pointer;
+}
+
+.confirmation-icons {
+  display: inline;
+  margin: 0 0.3rem;
+  cursor: pointer;
+}
+
+.settings-input {
+  margin-right: 0.5rem;
+}
+
+.settings-textarea {
+  border: solid grey 1px;
+  border-radius: 8px;
+  margin-top: 8px;
+  height: 100px;
+  width: 300px;
+  padding: 16px;
+}
+
+.settings-textarea:focus {
+  border: solid grey 1px;
+}
+
