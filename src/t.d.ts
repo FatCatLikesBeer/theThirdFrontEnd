@@ -1,12 +1,12 @@
 type UserDetailData = {
-  about?: string;
-  avatar?: string;
-  bio?: string;
-  display_name?: string;
-  location?: string;
-  created_at: string;
-  handle: string;
-  email: string;
+  [about?: string]: string;
+  [avatar?: string]: string;
+  [bio?: string]: string;
+  [display_name?: string]: string;
+  [location?: string]: string;
+  [created_at: string]: string;
+  [handle: string]: string;
+  [email: string]: string;
 }
 
 type PostListData = {

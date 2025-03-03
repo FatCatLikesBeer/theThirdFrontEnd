@@ -19,7 +19,7 @@ export default function SideBar({ loginSignupCallback }: { loginSignupCallback: 
   }
 
   return (
-    <div className="sidebar-margin-border-padding" ref={divRef}>
+    <div className="sidebar-container" ref={divRef}>
       <Link to="/"><h1 className="app-title sidebar-element" ref={appTitleRef}>App</h1></Link>
       <p className="app-tagline">Another Platform for Posting</p>
       <button className="sidebar-create-post-button">Create Post</button>

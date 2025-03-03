@@ -69,8 +69,11 @@ textarea:focus {
   margin: 0;
 }
 
-.sidebar-margin-border-padding {
+.sidebar-container {
+  position: sticky;
+  top: 2rem;
   margin: 2rem;
+  align-self: flex-start;
 }
 
 .user-detail-card {
@@ -235,6 +238,7 @@ textarea:focus {
 .app-full-page {
   display: flex;
   flex-direction: row;
+  overflow: visible;
 }
 
 .app-content-column {
@@ -279,11 +283,33 @@ textarea:focus {
   border-radius: 8px;
   margin-top: 8px;
   height: 100px;
-  width: 300px;
-  padding: 16px;
+  min-width: 250px;
+  max-width: 300px;
+  padding: 8px;
 }
 
 .settings-textarea:focus {
   border: solid grey 1px;
 }
 
+.toast {
+  background-color: var(--background-color);
+  display: block;
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  margin: 1rem;
+  padding: 0px 22px 0px 12px;
+  border: 2px solid grey;
+  border-radius: 10px;
+  width: fit-content;
+  height: fit-content;
+}
+
+.toast-success {
+  border-color: lightgreen;
+}
+
+.toast-error {
+  border-color: red;
+}

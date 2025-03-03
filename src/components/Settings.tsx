@@ -1,20 +1,23 @@
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { z } from "zod";
 
 import EditIcon from './icons/EditIcon';
 import CircleCheck from "./icons/CircleCheck";
 import CircleX from "./icons/CircleX";
 
+import ToastContext from "../context/ToastContext";
+
+import type { ToastHandle } from "./Toast";
+
 import avatarFormatter from '../library/avatarFormatter';
 import dateFormatter from '../library/dateFormatter';
 
 const apiURL = String(import.meta.env.VITE_API_URL);
-const forbiddenChars = `@#$%^&*()+=[]{}|:;"'<>,?/`;
-const forbiddenCharsRegex = new RegExp(`^[^\\s${forbiddenChars}]+$`);
+
 const handleSchema = z.string()
   .max(24, "16 Character Max")
   .min(3, "3 Character Min")
-  .regex(forbiddenCharsRegex, "Invalid Characters");
+  .regex(/^[a-zA-Z0-9_-]+$/, "Only letters, numbers, underscores, and dashes allowed");
 
 export default function Settings() {
   const [userData, setUserData] = useState<UserDetailData | null>(null);
@@ -27,8 +30,10 @@ export default function Settings() {
   const [editAbout, setEditAbout] = useState(false);
   const [editLoc, setEditLoc] = useState(false);
 
+  const toastRef = useContext(ToastContext);
+
   useEffect(() => {
-    const formattedAPIURL = apiURLFormatter();
+    const formattedAPIURL = apiURLFormatterGET();
     fetch(formattedAPIURL, {
       credentials: "include",
     })
@@ -75,9 +80,13 @@ export default function Settings() {
             Handle: @{editHandle
               ?
               <EditValue
-                inputValue={handle}
-                setInputValue={setHandle}
+                originalValue={userData.handle}
+                queryName="handle"
+                editValue={handle}
+                setEditValue={setHandle}
                 toggleEditState={toggleState(setEditHandle)}
+                toastRef={toastRef}
+                setUserData={setUserData}
               />
               :
               userData?.handle}
@@ -87,9 +96,13 @@ export default function Settings() {
               editDisplay
                 ?
                 <EditValue
-                  inputValue={displayName}
-                  setInputValue={setDisplayName}
+                  originalValue={userData.display_name}
+                  queryName="display_name"
+                  editValue={displayName}
+                  setEditValue={setDisplayName}
                   toggleEditState={toggleState(setEditDisplay)}
+                  toastRef={toastRef}
+                  setUserData={setUserData}
                 />
                 :
                 userData?.display_name
@@ -99,9 +112,13 @@ export default function Settings() {
               editLoc
                 ?
                 <EditValue
-                  inputValue={location}
-                  setInputValue={setLocation}
+                  originalValue={userData.location}
+                  queryName="location"
+                  editValue={location}
+                  setEditValue={setLocation}
                   toggleEditState={toggleState(setEditLoc)}
+                  toastRef={toastRef}
+                  setUserData={setUserData}
                 />
                 :
                 userData?.location
@@ -111,10 +128,14 @@ export default function Settings() {
               editAbout
                 ?
                 <EditValue
-                  inputValue={about}
-                  setInputValue={setAbout}
+                  originalValue={userData.about}
+                  queryName="about"
+                  editValue={about}
+                  setEditValue={setAbout}
                   toggleEditState={toggleState(setEditAbout)}
                   textarea={true}
+                  toastRef={toastRef}
+                  setUserData={setUserData}
                 />
                 :
                 userData?.about
@@ -138,15 +159,78 @@ export default function Settings() {
  * @description
  */
 function EditValue({
-  inputValue, setInputValue, toggleEditState, textarea = false,
+  originalValue,
+  queryName,
+  editValue,
+  setEditValue,
+  toggleEditState,
+  toastRef,
+  textarea = false,
+  setUserData,
 }: {
-  inputValue: string;
-  setInputValue: React.Dispatch<React.SetStateAction<string>>;
-  toggleEditState?: () => void;
+  originalValue: string | undefined;
+  queryName: string;
+  editValue: string;
+  setEditValue: React.Dispatch<React.SetStateAction<string>>;
+  toggleEditState: () => void;
   textarea?: boolean;
+  toastRef: React.RefObject<ToastHandle | null> | null;
+  setUserData: React.Dispatch<React.SetStateAction<UserDetailData | null>>;
 }) {
   function handleChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    setInputValue(event.target.value);
+    setEditValue(event.target.value);
+  }
+
+  function handleConfirm() {
+    if ("handle" === queryName) {
+      const handleParse = handleSchema.safeParse(editValue);
+      if (!handleParse.success) {
+        const errorMessage = JSON.parse(handleParse.error.message)[0].message;
+        console.log(errorMessage);
+        toastRef?.current?.showToast(errorMessage, false);
+        return;
+      }
+    }
+
+    const fetchURL = apiURLFormatterPUT(queryName, editValue);
+    fetch(fetchURL, {
+      method: "PUT",
+      credentials: "include",
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Request error 😩");
+        }
+      })
+      .then((json) => {
+        if (json.success) {
+          const firstLetter = queryName.slice(0, 1).toUpperCase();
+          const capitalized = `${firstLetter}${queryName.slice(1)}`
+          toastRef?.current?.showToast(`${capitalized} changed!`, true);
+          setEditValue(json.data.result);
+
+          setUserData((previousValue) => {
+            const newData = { ...previousValue } as UserDetailData;
+            newData[queryName] = json.data.result;
+            return newData;
+          });
+
+          toggleEditState();
+        } else {
+          throw new Error(json.message);
+        }
+      })
+      .catch((err: Error) => {
+        toastRef?.current?.showToast(err.message, false);
+        toggleEditState();
+      });
+  }
+
+  function handleCancel() {
+    setEditValue(originalValue || "");
+    toggleEditState();
   }
 
   return (
@@ -155,12 +239,12 @@ function EditValue({
         ?
         <>
           <div style={{ display: "inline" }}>
-            <CircleCheck />
-            <CircleX callBack={toggleEditState} />
+            <CircleCheck callBack={handleConfirm} />
+            <CircleX callBack={handleCancel} />
           </div>
           <div>
             <textarea
-              value={inputValue}
+              value={editValue}
               onChange={handleChange}
               className="settings-textarea"
             />
@@ -170,12 +254,12 @@ function EditValue({
         <>
           <input
             type="text"
-            value={inputValue}
+            value={editValue}
             onChange={handleChange}
             className="settings-input"
           />
-          <CircleCheck />
-          <CircleX callBack={toggleEditState} />
+          <CircleCheck callBack={handleConfirm} />
+          <CircleX callBack={handleCancel} />
         </>
       }
     </>
@@ -185,7 +269,17 @@ function EditValue({
 /**
   * apiURLFormatter
   */
-function apiURLFormatter(): string {
+function apiURLFormatterGET(): string {
   const param = `/api/users/self`;
+  return encodeURI(`${apiURL}${param}`);
+}
+
+/**
+  * apiURLFormatterPUT
+  * @argument {string} queryName - query name to be modified
+  * @argument {string} queryValue - query value to be inserted
+  */
+function apiURLFormatterPUT(queryName: string, queryValue: string): string {
+  const param = `/api/users?${queryName}=${queryValue}`;
   return encodeURI(`${apiURL}${param}`);
 }
