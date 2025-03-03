@@ -3,6 +3,7 @@
   --panel-min-height: 42px;
   --color: grey;
   --background-color: white;
+  --text-color: black;
 }
 
 @-webkit-keyframes spinner-border {
@@ -31,6 +32,10 @@
   animation: spinner-border .75s linear infinite;
 }
 
+a {
+  color: var(--text-color);
+}
+
 svg {
   vertical-align: -2px;
 }
@@ -41,13 +46,14 @@ svg {
 
 body {
   font-family: sans-serif, "Helvetica";
-  color: black;
+  color: var(--text-color);
   background-color: var(--background-color);
   margin: 0;
 }
 
 textarea {
   font-family: sans-serif, "Helvetica";
+  color: var(--text-color);
 }
 
 textarea:focus {
@@ -150,7 +156,7 @@ textarea:focus {
 }
 
 .create-post-input-element {
-  background-color: white;
+  background-color: var(--background-color);
   border: none;
   height: 8rem;
   resize: none;
@@ -248,14 +254,11 @@ textarea:focus {
 
 .sidebar-create-post-button {
   background-color: var(--background-color);
+  color: var(--text-color);
   border: solid 1px grey;
   border-radius: 100px;
   margin: 0.2rem 0;
   padding: 0.5rem 1rem;
-}
-
-.sidebar-selected {
-  background-color: gold;
 }
 
 .settings-modal-container {
@@ -312,4 +315,8 @@ textarea:focus {
 
 .toast-error {
   border-color: red;
+}
+
+.pointer {
+  cursor: pointer;
 }
