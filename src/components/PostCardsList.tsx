@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import { Link } from 'react-router';
 
 import avatarFormatter from "../library/avatarFormatter";
@@ -7,9 +6,6 @@ import dateFormatter from "../library/dateFormatter";
 import ReactionPanel from './icons/ReactionPanel';
 import Trash from './icons/Trash';
 
-import TrashModalContext from '../context/TrashModalContext';
-
-const apiURL = String(import.meta.env.VITE_API_URL) + "/api/posts"
 const contentLengthLimit = 150;
 const localUUID = String(localStorage.getItem('uuid'));
 
@@ -22,6 +18,7 @@ export default function PostsListCard({
   postContent,
   likeCount,
   commentCount,
+  handleDelete,
 }: {
   userUUID: string;
   userHandle: string;
@@ -32,19 +29,14 @@ export default function PostsListCard({
   postContent: string;
   likeCount: number;
   commentCount: number;
+  handleDelete: () => void;
 }) {
-  const trashModalRef = useContext(TrashModalContext) as React.RefObject<HTMLDialogElement>;
   const avatar = avatarFormatter(userAvatar);
   const date = dateFormatter(postTime);
   function handleComment() { window.open(`/posts/${postUUID}`, "_self") }
 
   function handleLike() {
     // handle the link
-  }
-
-  function handleDelete() {
-    trashModalRef.current.returnValue = apiURL + `/${postUUID}`;
-    trashModalRef.current.showModal();
   }
 
   function contentAsBlip(content: string): boolean {

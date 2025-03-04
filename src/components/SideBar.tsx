@@ -31,7 +31,6 @@ export default function SideBar({ loginSignupCallback }: { loginSignupCallback: 
     if (null === localStorage.getItem("useDarkTheme")) {
       localStorage.setItem("useDarkTheme", "false");
     }
-    console.log(useDarkTheme);
     if ("true" === useDarkTheme) {
       document.documentElement.style.setProperty("--background-color", "#181a1b");
       document.documentElement.style.setProperty("--text-color", "seashell");

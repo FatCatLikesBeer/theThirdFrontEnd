@@ -12,7 +12,10 @@ export default function TrashModal() {
   }
 
   function handleDelete() {
-    fetch(trashModalRef.current.returnValue,
+    const returnValueJSON = JSON.parse(trashModalRef.current.returnValue);
+    const apiURL = returnValueJSON.apiURL;
+    const postUUID = returnValueJSON.postUUID;
+    fetch(apiURL,
       {
         method: "DELETE",
         credentials: "include",
@@ -35,7 +38,7 @@ export default function TrashModal() {
       .catch((err: Error) => {
         toastRef?.current?.showToast(err.message, false);
       });
-    trashModalRef.current.close("deleted");
+    trashModalRef.current.close(postUUID);
   }
 
   return (

@@ -4,6 +4,7 @@ import './App.css'
 import AuthContext from './context/AuthContext.tsx';
 import AuthModalContext from './context/AuthModalContext.tsx';
 import ToastContext from './context/ToastContext.tsx';
+import TrashModalContext from './context/TrashModalContext.ts';
 
 import PageNotFound from './components/PageNotFound.tsx';
 import SideBar from './components/SideBar.tsx';
@@ -17,10 +18,12 @@ import Toast from './components/Toast.tsx';
 import { Route, Routes } from 'react-router';
 
 import AuthModal from './components/AuthModal.tsx';
+import TrashModal from './components/TrashModal.tsx';
 
 import type { ToastHandle } from './components/Toast.tsx';
 
 function App() {
+  const trashModalRef = useRef<HTMLDialogElement | null>(null);
   const modalRef = useRef<HTMLDialogElement | null>(null);
   const toastRef = useRef<ToastHandle | null>(null);
   const [uuid, setUUID] = useState<string | null>(localStorage.getItem("uuid"));
@@ -30,24 +33,28 @@ function App() {
   return (
     <AuthModalContext value={modalRef as React.RefObject<HTMLDialogElement>}>
       <AuthContext value={{ uuid, setUUID }}>
-        <ToastContext value={toastRef}>
-          <div className="app-full-page">
-            <Toast />
-            <AuthModal />
-            <SideBar loginSignupCallback={loginSignupCallback} />
-            <div className="app-content-column">
-              <Routes>
-                <Route path="/" element={<HomePagePosts />} />
-                <Route path="/mystuff" element={<MyStuff />} />
-                <Route path="/users" element={<UserList />} />
-                <Route path="/users/:uuid" element={<UserDetail />} />
-                <Route path="/posts/:uuid" element={<PostDetail />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/*" element={<PageNotFound />} />
-              </Routes>
+        <TrashModalContext value={trashModalRef as React.RefObject<HTMLDialogElement>}>
+          <ToastContext value={toastRef}>
+            <div className="app-full-page">
+              <Toast />
+              <AuthModal />
+              <TrashModal />
+              <SideBar loginSignupCallback={loginSignupCallback} />
+              <div className="app-content-column">
+                <Routes>
+                  <Route path="/" element={<HomePagePosts />} />
+                  <Route path="/mystuff" element={<MyStuff />} />
+                  <Route path="/users" element={<UserList />} />
+                  <Route path="/users/:uuid" element={<UserDetail />} />
+                  <Route path="/posts/:uuid" element={<PostDetail />} />
+                  <Route path="/settings" element={<Settings />} />
+                  <Route path="/*" element={<PageNotFound />} />
+                </Routes>
+              </div>
             </div>
-          </div>
-        </ToastContext>
+          </ToastContext>
+
+        </TrashModalContext>
       </AuthContext>
     </AuthModalContext>
   );
