@@ -13,6 +13,11 @@ export default function Toast({ toastRef }: { toastRef: React.RefObject<ToastHan
 
   useImperativeHandle(toastRef, () => {
     return {
+      /**
+       * showToast
+       * @argument {string} message - Message to display
+       * @argument {boolean} success - Show a success or error message
+       */
       showToast: function(message: string, success: boolean) {
         setIsSuccess(success);
         setMessage(message);

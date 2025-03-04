@@ -1,7 +1,7 @@
 :root {
   --panel-radius: 50%;
   --panel-min-height: 42px;
-  --color: grey;
+  --accent-color: grey;
   --background-color: white;
   --text-color: black;
 }
@@ -96,7 +96,7 @@ textarea:focus {
 }
 
 .avatar-list {
-  height: 4rem;
+  height: 3rem;
 }
 
 .reaction-panel {
@@ -118,14 +118,14 @@ textarea:focus {
 }
 
 .reaction-likes {
-  border: 1px solid var(--color);
+  border: 1px solid var(--accent-color);
   border-right: none;
   border-top-left-radius: var(--panel-min-height);
   border-bottom-left-radius: var(--panel-min-height);
 }
 
 .reaction-comments {
-  border: 1px solid var(--color);
+  border: 1px solid var(--accent-color);
   border-left : none;
   border-top-right-radius: var(--panel-min-height);
   border-bottom-right-radius: var(--panel-min-height);
@@ -136,9 +136,9 @@ textarea:focus {
 }
 
 .create-post-container {
-  border: solid 1px grey;
+  border: solid 1px var(--accent-color);
   border-radius: 0.5rem;
-  margin: 2rem 0;
+  margin-bottom: 2rem;
   max-width: 28rem;
 }
 
@@ -155,10 +155,10 @@ textarea:focus {
   margin: 1rem;
 }
 
-.create-post-input-element {
+.create-post-textarea-element {
   background-color: var(--background-color);
   border: none;
-  height: 8rem;
+  height: 6rem;
   resize: none;
 }
 
@@ -319,4 +319,61 @@ textarea:focus {
 
 .pointer {
   cursor: pointer;
+}
+
+.user-header-detail {
+  display: flex;
+  flex-direction: row;
+}
+
+.user-header-names {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin-left: 0.8rem;
+}
+
+.user-header-names > * {
+  margin: 0;
+}
+
+.blip {
+  font-size: 2rem;
+  margin: 4px 0;
+}
+
+.post-card-list-container {
+  border: 1px solid var(--accent-color);
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+  max-width: 28rem;
+}
+
+.post-card-list-padding {
+  margin: 1rem;
+}
+
+.post-content {
+  padding: 8px 0;
+}
+
+.wrting-prompt-refresh {
+  position: sticky;
+  top: 2px;
+  right: 2px;
+}
+
+.characters-remaining {
+  text-align: right;
+  font-size: small;
+  padding-right: 8px;
+  margin: 2px;
+}
+
+.yellow {
+  color: gold;
+}
+
+.red {
+  color: crimson;
 }

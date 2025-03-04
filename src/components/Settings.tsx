@@ -58,11 +58,11 @@ export default function Settings() {
 
   // Onboarding
   useEffect(() => {
-    if (!Boolean(Number(localStorage.getItem("onboarding")))) {
-      // open Settings edit modal
-      // you still need to create the modal, copy what you did with the auth modal
+    if (null === localStorage.getItem("onboarded")) {
+      localStorage.setItem("onboarded", "true");
+      toastRef?.current?.showToast("Pick a cool handle", true);
     }
-  });
+  }, []);
 
   function toggleState(stateFunc: React.Dispatch<React.SetStateAction<boolean>>) {
     function onClickCallBackFunction() { stateFunc(prevState => !prevState) }

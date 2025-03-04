@@ -1,5 +1,5 @@
-const baseURL = "http://my-bucket.mooo.com:9000/the-third/";
-const avatarDefault = `${baseURL}avatar.jpg`;
+const baseURL = String(import.meta.env.VITE_R2_DEV);
+const avatarDefault = `${baseURL}/avatar.jpg`;
 
 /**
  * Formats 'avatar' data string to URL for display in HTML
@@ -10,7 +10,7 @@ const avatarDefault = `${baseURL}avatar.jpg`;
 export default function avatarFormatter(avatar: string | null): string {
   let avatarLocation: string;
   if (avatar != null) {
-    avatarLocation = `${baseURL}${avatar}.jpg`;
+    avatarLocation = `${baseURL}/${avatar}.jpg`;
   } else {
     avatarLocation = avatarDefault;
   }

@@ -54,9 +54,6 @@ function App() {
 
 export default App
 
-// TODO: Add username selection for onboarding after signup
-// TODO: user detail should not include email unless it's the user themself
-// TODO: Settings page
 // TODO: Post input & create a post from UI
 // TODO: PageNotFound component should have a timer before it procs
 // TODO: find icons (share, post, delete, options)
@@ -64,3 +61,5 @@ export default App
 // TODO: figure out why you have a JWT in frontend
 // TODO: configure proxy pathing for development (frontend and backend should both point to 5173)
 // TODO: sidebar should be static/absolute
+//
+// TODO: Swap R2 Bucket URL

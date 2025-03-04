@@ -32,7 +32,7 @@ export default function SignupToken({ email }: { email: string }) {
     }, 2000);
     const apiURL = apiURLFormatter(email, token);
     const method = "GET";
-    fetch(apiURL, { method: method })
+    fetch(apiURL, { method: method, credentials: "include" })
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -43,7 +43,6 @@ export default function SignupToken({ email }: { email: string }) {
       .then(json => {
         if (json.success) {
           localStorage.setItem("uuid", json.data.uuid);
-          localStorage.setItem("onboarding", "0");
           setUUID(json.data.uuid);
           window.location.href = "/settings";
         } else {

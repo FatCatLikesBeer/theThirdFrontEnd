@@ -22,33 +22,33 @@ type PostListData = {
 }
 
 type PostDetailData = {
-  avatar: string;
-  comment_count: number;
-  content: string;
-  created_at: string;
-  display_name: string;
-  handle: string;
-  like_count: number;
-  post_uuid: string;
-  user_uuid: string;
-  comments: PostComments[];
+  [avatar: string]: string;
+  [comment_count: string]: number;
+  [content: string]: string;
+  [created_at: string]: string;
+  [display_name: string]: string;
+  [handle: string]: string;
+  [like_count: string]: number;
+  [post_uuid: string]: string;
+  [user_uuid: string]: string;
+  [comments: string]: PostComments[];
 }
 
 type PostComments = {
-  comment_uuid: string;
-  content: string;
-  created_at: string;
-  user_uuid: string;
-  handle: string;
-  avatar: string;
-  likes: number;
+  [comment_uuid: string]: string;
+  [content: string]: string;
+  [created_at: string]: string;
+  [user_uuid: string]: string;
+  [handle: string]: string;
+  [avatar: string]: string;
+  [likes: string]: number;
 }
 
 type APIResponse<T> = {
   success: boolean;
   path: string;
   message: string;
-  data: T;
+  data?: T;
 }
 
 type APIUserData = {

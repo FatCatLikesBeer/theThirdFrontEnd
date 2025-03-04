@@ -3,6 +3,8 @@ import { Link } from "react-router";
 
 import AuthContext from "../context/AuthContext";
 
+const apiURL = String(import.meta.env.VITE_API_URL) + "/api";
+
 export default function SideBar({ loginSignupCallback }: { loginSignupCallback: () => void }) {
   const [useDarkTheme, setUseDarkTheme] = useState(localStorage.getItem("useDarkTheme"));
   const divRef = useRef<HTMLHeadingElement | null>(null);
@@ -16,9 +18,13 @@ export default function SideBar({ loginSignupCallback }: { loginSignupCallback: 
 
   function logoutCallback() {
     localStorage.removeItem("uuid");
-    window.location.href = "/";
+    fetch(apiURL + "/auth/logout", { credentials: "include" })
+      .then((res) => {
+        if (res.ok) {
+          window.location.href = "/";
+        }
+      });
   }
-
 
   useEffect(() => {
     // set localStorage value
