@@ -28,18 +28,16 @@ function App() {
   const toastRef = useRef<ToastHandle | null>(null);
   const [uuid, setUUID] = useState<string | null>(localStorage.getItem("uuid"));
 
-  function loginSignupCallback() { modalRef.current?.showModal() }
-
   return (
     <AuthModalContext value={modalRef as React.RefObject<HTMLDialogElement>}>
-      <AuthContext value={{ uuid, setUUID }}>
-        <TrashModalContext value={trashModalRef as React.RefObject<HTMLDialogElement>}>
+      <TrashModalContext value={trashModalRef as React.RefObject<HTMLDialogElement>}>
+        <AuthContext value={{ uuid, setUUID }}>
           <ToastContext value={toastRef}>
             <div className="app-full-page">
               <Toast />
               <AuthModal />
               <TrashModal />
-              <SideBar loginSignupCallback={loginSignupCallback} />
+              <SideBar />
               <div className="app-content-column">
                 <Routes>
                   <Route path="/" element={<HomePagePosts />} />
@@ -53,16 +51,15 @@ function App() {
               </div>
             </div>
           </ToastContext>
-
-        </TrashModalContext>
-      </AuthContext>
+        </AuthContext>
+      </TrashModalContext>
     </AuthModalContext>
   );
 }
 
 export default App
 
-// TODO: delete post
+// TODO: Make trash modal look nice
 // TODO: Auth thingy needs to be theme aware
 // TODO: PageNotFound component should have a timer before it procs
 // TODO: find icons (share, post, delete, options)

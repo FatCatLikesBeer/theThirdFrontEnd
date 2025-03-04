@@ -2,10 +2,11 @@ import { useContext, useRef, useState, useEffect } from "react";
 import { Link } from "react-router";
 
 import AuthContext from "../context/AuthContext";
+import AuthModalContext from "../context/AuthModalContext";
 
 const apiURL = String(import.meta.env.VITE_API_URL) + "/api";
 
-export default function SideBar({ loginSignupCallback }: { loginSignupCallback: () => void }) {
+export default function SideBar() {
   const [useDarkTheme, setUseDarkTheme] = useState(localStorage.getItem("useDarkTheme"));
   const divRef = useRef<HTMLHeadingElement | null>(null);
   const appTitleRef = useRef<HTMLHeadingElement | null>(null);
@@ -14,6 +15,7 @@ export default function SideBar({ loginSignupCallback }: { loginSignupCallback: 
   const friendsRef = useRef<HTMLParagraphElement | null>(null);
   const myStuffRef = useRef<HTMLParagraphElement | null>(null);
   const settingsRef = useRef<HTMLParagraphElement | null>(null);
+  const authModalRef = useContext(AuthModalContext);
   const { uuid } = useContext(AuthContext);
 
   function logoutCallback() {
@@ -47,6 +49,8 @@ export default function SideBar({ loginSignupCallback }: { loginSignupCallback: 
       return newValue;
     });
   }
+
+  function loginSignupCallback() { authModalRef?.current?.showModal() }
 
   return (
     <div className="sidebar-container" ref={divRef}>
