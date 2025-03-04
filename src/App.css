@@ -377,3 +377,44 @@ textarea:focus {
 .red {
   color: crimson;
 }
+
+.flex-space-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.width2rem {
+  width: 8rem;
+}
+
+.trash-modal {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border: solid 1px var(--accent-color);
+  border-radius: 0.5rem;
+  justify-content: center;
+}
+
+.modal-button {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border: solid 1px var(--accent-color);
+  border-radius: 0.5rem;
+  padding: 8px;
+}
+
+.button-red {
+  background-color: crimson;
+}
+
+.button-green {
+  background-color: lightgreen;
+}

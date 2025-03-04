@@ -11,11 +11,12 @@ import UserList from './components/UserList.tsx'
 import UserDetail from './components/UserDetail.tsx';
 import PostDetail from './components/PostDetail.tsx';
 import HomePagePosts from './components/HomePagePosts.tsx';
-import AuthModal from './components/AuthModal.tsx';
 import Settings from './components/Settings.tsx';
 import MyStuff from './components/MyStuff.tsx';
 import Toast from './components/Toast.tsx';
 import { Route, Routes } from 'react-router';
+
+import AuthModal from './components/AuthModal.tsx';
 
 import type { ToastHandle } from './components/Toast.tsx';
 
@@ -31,7 +32,7 @@ function App() {
       <AuthContext value={{ uuid, setUUID }}>
         <ToastContext value={toastRef}>
           <div className="app-full-page">
-            <Toast toastRef={toastRef} />
+            <Toast />
             <AuthModal />
             <SideBar loginSignupCallback={loginSignupCallback} />
             <div className="app-content-column">
@@ -54,7 +55,8 @@ function App() {
 
 export default App
 
-// TODO: Post input & create a post from UI
+// TODO: delete post
+// TODO: Auth thingy needs to be theme aware
 // TODO: PageNotFound component should have a timer before it procs
 // TODO: find icons (share, post, delete, options)
 // TODO: Maybe work on types and/or zod schemas?

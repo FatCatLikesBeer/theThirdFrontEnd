@@ -1,4 +1,4 @@
-import { useRef, useImperativeHandle, useState } from "react";
+import { useRef, useImperativeHandle, useState, useContext } from "react";
 import CircleCheck from "./icons/CircleCheck";
 import CircleX from "./icons/CircleX";
 
@@ -6,7 +6,10 @@ export interface ToastHandle {
   showToast: (message: string, success: boolean) => void;
 }
 
-export default function Toast({ toastRef }: { toastRef: React.RefObject<ToastHandle | null> }) {
+import ToastContext from "../context/ToastContext";
+
+export default function Toast() {
+  const toastRef = useContext(ToastContext);
   const [message, setMessage] = useState<null | string>(null);
   const [isSuccess, setIsSuccess] = useState<boolean>(true);
   const divRef = useRef<HTMLDivElement | null>(null);

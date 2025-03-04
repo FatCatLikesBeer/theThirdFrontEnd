@@ -1,17 +1,22 @@
+import { useContext } from "react";
 import { Link } from 'react-router';
 
 import avatarFormatter from "../library/avatarFormatter";
 import dateFormatter from "../library/dateFormatter";
 
 import ReactionPanel from './icons/ReactionPanel';
+import Trash from './icons/Trash';
 
+import TrashModalContext from '../context/TrashModalContext';
+
+const apiURL = String(import.meta.env.VITE_API_URL) + "/api/posts"
 const contentLengthLimit = 150;
+const localUUID = String(localStorage.getItem('uuid'));
 
 export default function PostsListCard({
   userUUID,
   userHandle,
   userAvatar,
-  userDisplayName,
   postUUID,
   postTime,
   postContent,
@@ -28,11 +33,18 @@ export default function PostsListCard({
   likeCount: number;
   commentCount: number;
 }) {
+  const trashModalRef = useContext(TrashModalContext) as React.RefObject<HTMLDialogElement>;
   const avatar = avatarFormatter(userAvatar);
   const date = dateFormatter(postTime);
   function handleComment() { window.open(`/posts/${postUUID}`, "_self") }
+
   function handleLike() {
-    // requires auth
+    // handle the link
+  }
+
+  function handleDelete() {
+    trashModalRef.current.returnValue = apiURL + `/${postUUID}`;
+    trashModalRef.current.showModal();
   }
 
   function contentAsBlip(content: string): boolean {
@@ -42,12 +54,15 @@ export default function PostsListCard({
   return (
     <div className="post-card-list-container">
       <div className="post-card-list-padding">
-        <div className="user-header-detail">
-          <img className="user-avatar avatar-list" src={avatar} alt={`Avatar for user ${userHandle}`} />
-          <div className="user-header-names">
-            <p><Link to={`/users/${userUUID}`}>{userHandle}</Link></p>
-            <p>{date}</p>
+        <div className="flex-space-between">
+          <div className="user-header-detail">
+            <img className="user-avatar avatar-list" src={avatar} alt={`Avatar for user ${userHandle}`} />
+            <div className="user-header-names">
+              <p><Link to={`/users/${userUUID}`}>{userHandle}</Link></p>
+              <p>{date}</p>
+            </div>
           </div>
+          {localUUID === userUUID ? <Trash callBack={handleDelete} /> : null}
         </div>
         <div className="post-content">
           <p className={contentAsBlip(postContent) ? "blip" : ""} >{postContent}</p>
@@ -57,7 +72,7 @@ export default function PostsListCard({
           likeCount={likeCount}
           commentCount={commentCount}
           likeFill={false}
-          likeCallback={(): any => { console.log("Like as been pressed") }}
+          likeCallback={handleLike}
           commentCallback={handleComment}
         />
       </div>

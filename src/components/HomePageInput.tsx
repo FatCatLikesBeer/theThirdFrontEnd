@@ -1,18 +1,15 @@
 import { useState, useRef, ChangeEvent, useEffect, useContext } from "react";
 
 import ToastContext from "../context/ToastContext";
+import PostListDataContext from "../context/PostListDataContext";
 
 import writingPrompt from "../library/writingPrompt";
 
 const textLimit = 400;
-
 const postUrl = String(import.meta.env.VITE_API_URL);
 
-export default function HomePageInput({
-  setPosts
-}: {
-  setPosts: React.Dispatch<React.SetStateAction<PostListData[] | null>>;
-}) {
+export default function HomePageInput() {
+  const setPosts = useContext(PostListDataContext) as React.Dispatch<React.SetStateAction<PostListData[] | null>>;
   const [inputValue, setInputValue] = useState("");
   const [prompt] = useState(writingPrompt());
   const divRef = useRef<null | HTMLDivElement>(null);
@@ -42,6 +39,7 @@ export default function HomePageInput({
           console.log(j);
           setInputValue("");
           setPosts((prevValue) => {
+            toastRef?.current?.showToast("Post posted!", true);
             if (null != prevValue) {
               const newValue = [...prevValue];
               newValue.unshift({ ...j.data as PostListData });
