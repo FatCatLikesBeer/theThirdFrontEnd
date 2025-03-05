@@ -43,7 +43,7 @@ export default function TrashModal() {
 
   return (
     <dialog ref={trashModalRef} className="trash-modal">
-      <p>Delete?</p>
+      <h3 className="trash-modal-title">Confirm Delete</h3>
       <div className="flex-space-between flex-row ">
         <button type="button" onClick={handleCancel} className="modal-button">Cancel</button>
         <button type="button" onClick={handleDelete} className="modal-button button-red">Delete</button>

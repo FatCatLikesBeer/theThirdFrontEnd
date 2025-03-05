@@ -1,16 +1,17 @@
 import React, { useEffect, useState, useContext } from "react";
 import { z } from "zod";
 
-import EditIcon from './icons/EditIcon';
+import EditIcon from "./icons/EditIcon";
 import CircleCheck from "./icons/CircleCheck";
 import CircleX from "./icons/CircleX";
 
 import ToastContext from "../context/ToastContext";
+import EditAvatarModalContext from "../context/EditAvatarModalContext.ts";
 
 import type { ToastHandle } from "./Toast";
 
-import avatarFormatter from '../library/avatarFormatter';
-import dateFormatter from '../library/dateFormatter';
+import avatarFormatter from "../library/avatarFormatter";
+import dateFormatter from "../library/dateFormatter";
 
 const apiURL = String(import.meta.env.VITE_API_URL);
 
@@ -31,6 +32,7 @@ export default function Settings() {
   const [editLoc, setEditLoc] = useState(false);
 
   const toastRef = useContext(ToastContext);
+  const settingsModalRef = useContext(EditAvatarModalContext) as React.RefObject<HTMLDialogElement>;
 
   useEffect(() => {
     const formattedAPIURL = apiURLFormatterGET();
@@ -69,13 +71,21 @@ export default function Settings() {
     return onClickCallBackFunction;
   }
 
+  function editAvatar() {
+    settingsModalRef?.current.showModal();
+  }
+
   return (
     <>
       {userData
         ?
         <div>
           <h1 className="page-title">Settings</h1>
-          <img src={avatarFormatter(userData.avatar || null)} className='user-avatar avatar-detail' />
+          <img
+            className="user-avatar avatar-detail pointer"
+            onClick={editAvatar}
+            src={avatarFormatter(userData.avatar || null)}
+          />
           <p><EditIcon callBack={toggleState(setEditHandle)} />{"  "}
             Handle: @{editHandle
               ?

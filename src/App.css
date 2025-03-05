@@ -93,10 +93,14 @@ textarea:focus {
 
 .avatar-detail {
   height: 15rem;
+  width: 15rem;
+  object-fit: cover;
 }
 
 .avatar-list {
   height: 3rem;
+  width: 3rem;
+  object-fit: cover;
 }
 
 .reaction-panel {
@@ -170,6 +174,8 @@ textarea:focus {
 }
 
 .auth-modal-container {
+  background-color: var(--background-color);
+  color: var(--text-color);
   padding: 8px;
   border: solid grey 1px;
   border-radius: 0.5rem;
@@ -191,6 +197,8 @@ textarea:focus {
 }
 
 .auth-form-input {
+  background-color: var(--background-color);
+  color: var(--text-color);
   border: solid grey 1px;
   border-radius: 0.5rem;
   padding: 0.3rem;
@@ -378,6 +386,11 @@ textarea:focus {
   color: crimson;
 }
 
+.flex-space-around {
+  display: flex;
+  justify-content: space-around;
+}
+
 .flex-space-between {
   display: flex;
   justify-content: space-between;
@@ -395,12 +408,18 @@ textarea:focus {
   width: 8rem;
 }
 
+.trash-modal-title {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
 .trash-modal {
   background-color: var(--background-color);
   color: var(--text-color);
   border: solid 1px var(--accent-color);
   border-radius: 0.5rem;
   justify-content: center;
+  width: 140px;
 }
 
 .modal-button {
