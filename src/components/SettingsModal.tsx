@@ -13,7 +13,8 @@ import ToastContext from "../context/ToastContext.tsx";
 const apiURL = String(import.meta.env.VITE_API_URL);
 
 export default function SettingsModal() {
-  const [avatar, setAvatar] = useState("");
+  const [avatarFile, setAvatarFile] = useState<FileList>();
+  const [avatarURL, setAvatarURL] = useState<string>("");
   const closeButtonRef = useRef<SVGSVGElement | null>(null);
   const editAvatarRef = useContext(EditAvatarModalContext) as React.RefObject<HTMLDialogElement>;
   const imageInputRef = useRef<HTMLInputElement>(null);
@@ -22,9 +23,10 @@ export default function SettingsModal() {
   // Image Input Event Listeners
   useEffect(() => {
     function handleChange(this: HTMLInputElement) {
-      const fileList = this.files;
+      const fileList = this.files as FileList;
       const providedAvatar = URL.createObjectURL(fileList[0]);
-      setAvatar(providedAvatar);
+      setAvatarFile(fileList);
+      setAvatarURL(providedAvatar);
     }
 
     imageInputRef.current?.addEventListener("change", handleChange);
@@ -51,28 +53,54 @@ export default function SettingsModal() {
       const signedURLJSON: APIResponse<string> = await signedURLRequest.json();
       if (!signedURLJSON.success) { throw new Error(signedURLJSON.message) }
 
-      console.log(signedURLJSON.data);
+      const sendFile = await fetch(String(signedURLJSON.data), {
+        cache: "reload",
+        method: "PUT",
+        body: avatarFile[0],
+        headers: { "Content-Type": avatarFile[0].type }
+      });
+      console.log("sendFile", sendFile);
+      if (!sendFile.ok) {
+        throw new Error("Upload Error")
+      } else {
+        toastRef?.current?.showToast("Avatar Updated!", true);
+        editAvatarRef.current.close("avatar_updated");
+      }
     } catch (err: any) {
       toastRef?.current?.showToast(err.message, false);
     }
+  }
 
-    // TODO: I'm currently able to fetch the signed URL form my endpoint. I now need to
-    // TODO: write another fetch function to send "PUT" the user's avatar to the R2 bucket
-    // TODO: and on success, send the update to the database, another fetch "PUT" to my API
+  async function handleDefault() {
+    try {
+      const avatarDefault = await fetch(apiURL + "/api/users?avatar=default", {
+        method: "PUT",
+        credentials: "include",
+      });
+      console.log(avatarDefault);
+      if (avatarDefault.ok) {
+        editAvatarRef.current.close("avatar_default");
+        toastRef?.current?.showToast("Avatar Default!", true);
+      }
+    } catch (err: any) {
+      console.error(err);
+      toastRef?.current?.showToast(err.message, false);
+    }
   }
 
   return (
     <dialog ref={editAvatarRef} className="auth-modal-container">
       <div className="flex-space-between flex-column">
         <CloseIcon ref={closeButtonRef} />
-        {avatar
+        {avatarURL
           ?
-          <img className="user-avatar avatar-detail" src={avatar} />
+          <img className="user-avatar avatar-detail" src={avatarURL} />
           :
           <h2 className="trash-modal-title">Upload New Avatar</h2>
         }
-        <input ref={imageInputRef} type="file" />
+        <input ref={imageInputRef} accept="image/*" type="file" max="1" />
         <button type="button" className="modal-button" style={{ marginTop: "1rem" }} onClick={handleSubmit}>Submit</button>
+        <button type="button" className="modal-button button-red" style={{ marginTop: "8px" }} onClick={handleDefault}>Use Default</button>
       </div>
     </dialog>
   );

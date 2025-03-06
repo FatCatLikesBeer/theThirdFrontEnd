@@ -10,7 +10,8 @@ const avatarDefault = `${baseURL}/avatar.jpg`;
 export default function avatarFormatter(avatar: string | null): string {
   let avatarLocation: string;
   if (avatar != null) {
-    avatarLocation = `${baseURL}/${avatar}.jpg`;
+    // Cache busting URL. I don't like this
+    avatarLocation = `${baseURL}/${avatar}.jpg?${Date.now()}`;
   } else {
     avatarLocation = avatarDefault;
   }

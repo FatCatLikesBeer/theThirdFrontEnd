@@ -54,6 +54,7 @@ body {
 textarea {
   font-family: sans-serif, "Helvetica";
   color: var(--text-color);
+  background-color: var(--background-color);
 }
 
 textarea:focus {

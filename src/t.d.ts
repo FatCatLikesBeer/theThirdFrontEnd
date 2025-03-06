@@ -1,6 +1,6 @@
 type UserDetailData = {
   [about?: string]: string;
-  [avatar?: string]: string;
+  [avatar?: string]: string | null;
   [bio?: string]: string;
   [display_name?: string]: string;
   [location?: string]: string;

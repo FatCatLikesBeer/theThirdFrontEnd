@@ -25,9 +25,9 @@ export default function Settings() {
   const [handle, setHandle] = useState("");
   const [about, setAbout] = useState("");
   const [location, setLocation] = useState("");
-  const [displayName, setDisplayName] = useState("");
+  // const [displayName, setDisplayName] = useState("");
   const [editHandle, setEditHandle] = useState(false);
-  const [editDisplay, setEditDisplay] = useState(false);
+  // const [editDisplay, setEditDisplay] = useState(false);
   const [editAbout, setEditAbout] = useState(false);
   const [editLoc, setEditLoc] = useState(false);
 
@@ -47,7 +47,7 @@ export default function Settings() {
         if (!json.success) { throw new Error(json.message) }
         setUserData({ ...json.data });
         setHandle(json.data.handle);
-        setDisplayName(json.data.display_name);
+        // setDisplayName(json.data.display_name);
         setAbout(json.data.about);
         setLocation(json.data.location);
         return json.data;
@@ -64,6 +64,25 @@ export default function Settings() {
       localStorage.setItem("onboarded", "true");
       toastRef?.current?.showToast("Pick a cool handle", true);
     }
+  }, []);
+
+  // Update User Avatar
+  // Just refresh state to rerun Cache Busting function
+  useEffect(() => {
+    function updateImage() {
+      if (settingsModalRef.current.returnValue === "avatar_updated") {
+        setUserData(p => { const n = { ...p }; return n });
+      }
+      if (settingsModalRef.current.returnValue === "avatar_default") {
+        setUserData(p => {
+          const n = { ...p }
+          n.avatar = "";
+          return n;
+        });
+      }
+    }
+
+    settingsModalRef.current.addEventListener("close", updateImage);
   }, []);
 
   function toggleState(stateFunc: React.Dispatch<React.SetStateAction<boolean>>) {
@@ -87,7 +106,7 @@ export default function Settings() {
             src={avatarFormatter(userData.avatar || null)}
           />
           <p><EditIcon callBack={toggleState(setEditHandle)} />{"  "}
-            Handle: @{editHandle
+            Handle: {editHandle
               ?
               <EditValue
                 originalValue={userData.handle}
@@ -101,22 +120,22 @@ export default function Settings() {
               :
               userData?.handle}
           </p>
-          <p><EditIcon callBack={toggleState(setEditDisplay)} />{"  "}
-            Display Name: {
-              editDisplay
-                ?
-                <EditValue
-                  originalValue={userData.display_name}
-                  queryName="display_name"
-                  editValue={displayName}
-                  setEditValue={setDisplayName}
-                  toggleEditState={toggleState(setEditDisplay)}
-                  toastRef={toastRef}
-                  setUserData={setUserData}
-                />
-                :
-                userData?.display_name
-            }</p>
+          {/* <p><EditIcon callBack={toggleState(setEditDisplay)} />{"  "} */}
+          {/*   Display Name: { */}
+          {/*     editDisplay */}
+          {/*       ? */}
+          {/*       <EditValue */}
+          {/*         originalValue={userData.display_name} */}
+          {/*         queryName="display_name" */}
+          {/*         editValue={displayName} */}
+          {/*         setEditValue={setDisplayName} */}
+          {/*         toggleEditState={toggleState(setEditDisplay)} */}
+          {/*         toastRef={toastRef} */}
+          {/*         setUserData={setUserData} */}
+          {/*       /> */}
+          {/*       : */}
+          {/*       userData?.display_name */}
+          {/*   }</p> */}
           <p><EditIcon callBack={toggleState(setEditLoc)} />{"  "}
             Location: {
               editLoc
