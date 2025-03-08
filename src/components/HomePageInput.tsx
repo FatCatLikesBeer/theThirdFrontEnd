@@ -2,6 +2,7 @@ import { useState, useRef, ChangeEvent, useEffect, useContext } from "react";
 
 import ToastContext from "../context/ToastContext";
 import PostListDataContext from "../context/PostListDataContext";
+import AuthContext from "../context/AuthContext";
 
 import writingPrompt from "../library/writingPrompt";
 
@@ -16,6 +17,7 @@ export default function HomePageInput() {
   const inputRef = useRef<null | HTMLTextAreaElement>(null);
   const textLimitRef = useRef<null | HTMLParagraphElement>(null);
   const toastRef = useContext(ToastContext);
+  const { uuid } = useContext(AuthContext);
 
   function handleInput(event: ChangeEvent<HTMLTextAreaElement>) {
     setInputValue(event.target.value)
@@ -74,24 +76,31 @@ export default function HomePageInput() {
   }, [inputValue]);
 
   return (
-    <div ref={divRef} className="create-post-container">
-      <p className="create-post-title">Share Something Cool!</p>
-      <div className="create-post-input-container">
-        <textarea
-          className="create-post-textarea-element"
-          ref={inputRef}
-          onChange={handleInput}
-          value={inputValue}
-          placeholder={prompt}
-        />
-        <p className="characters-remaining" ref={textLimitRef}>{inputValue.length} / {textLimit}</p>
-        <button
-          className="create-post-submit-button"
-          onClick={handleClick}
-          type="button"
-          disabled={textLimit <= inputValue.length}
-        >Post</button>
-      </div>
-    </div>
+    <>
+      {uuid
+        ?
+        <div ref={divRef} className="create-post-container">
+          <p className="create-post-title">Share Something Cool!</p>
+          <div className="create-post-input-container">
+            <textarea
+              className="create-post-textarea-element"
+              ref={inputRef}
+              onChange={handleInput}
+              value={inputValue}
+              placeholder={prompt}
+            />
+            <p className="characters-remaining" ref={textLimitRef}>{inputValue.length} / {textLimit}</p>
+            <button
+              className="create-post-submit-button"
+              onClick={handleClick}
+              type="button"
+              disabled={textLimit <= inputValue.length}
+            >Post</button>
+          </div>
+        </div>
+        :
+        ""
+      }
+    </>
   );
 }

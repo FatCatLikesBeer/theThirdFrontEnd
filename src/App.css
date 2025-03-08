@@ -74,6 +74,7 @@ textarea:focus {
 
 .page-title {
   margin: 0;
+  margin-bottom: 12px;
 }
 
 .sidebar-container {
@@ -85,7 +86,38 @@ textarea:focus {
 
 .user-detail-card {
   display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+}
+
+.user-detail-card > * {
+  text-align: center;
+  margin: 8px 0px;
+}
+
+.user-detail-interactions {
+  width: 5rem;
+  display: flex;
   flex-direction: row;
+  justify-content: center;
+  margin: auto;
+  margin-top: 12px;
+}
+
+.user-detail-interactions > * > * {
+  margin: 8px;
+}
+
+.user-detail-user-name {
+  margin: 0px;
+}
+
+.location {
+  margin-top: 4px;
+  margin-bottom: 12px;
+  font-size: small;
+  color: var(--accent-color);
 }
 
 .user-avatar {

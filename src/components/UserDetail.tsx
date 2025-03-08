@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router";
 
 import dateFormatter from "../library/dateFormatter";
@@ -6,9 +6,14 @@ import avatarFormatter from "../library/avatarFormatter";
 import PostsListCard from "./PostCardsList";
 import UserNotFound from "./UserNotFound";
 
+import TrashModalContext from "../context/TrashModalContext";
+
+const apiURL = String(import.meta.env.VITE_API_URL) + "/api/posts/";
+
 export default function UserDetail() {
   const [user, setUser] = useState<UserDetailData | null>(null);
   const [posts, setPosts] = useState<PostListData[] | null>(null);
+  const trashModalRef = useContext(TrashModalContext) as React.RefObject<HTMLDialogElement>;
   const params = useParams();
 
   useEffect(() => {
@@ -50,19 +55,42 @@ export default function UserDetail() {
       });
   }, []);
 
+  function handleDelete(postUUID: string) {
+    return () => {
+      const returnValueJSON = {
+        apiURL: apiURL + postUUID,
+        postUUID: postUUID,
+      }
+      trashModalRef.current.returnValue = JSON.stringify(returnValueJSON);
+      trashModalRef.current.showModal();
+    }
+  }
+
   return (
     <>
       {user
         ?
         <div className="user-detail-container">
           <div className="user-detail-card">
-            <img className="user-avatar avatar-detail" src={user.avatar} />
-            <div>
-              <p>Handle: @{user.handle}</p>
-              <p>User since: {user.created_at}</p>
-              <p>Display name: {user.display_name}</p>
-              <p>Location: {user.location}</p>
+            <h1 className="user-detail-user-name">{user.handle}</h1>
+            {user.location && <p className="location">{user.location}</p>}
+            <img className="user-avatar avatar-detail" src={user.avatar} style={{ margin: "auto" }} />
+            <div className="user-detail-interactions">
+              <div>
+                <p>Posts</p>
+                <p>{user.post_count || 0}</p>
+              </div>
+              <div>
+                <p>Likes</p>
+                <p>{user.like_count || 0}</p>
+              </div>
+              <div>
+                <p>Friends</p>
+                <p>{user.friend_count || 0}</p>
+              </div>
             </div>
+            <p>User since: {user.created_at}</p>
+            <p>{user.about}</p>
           </div>
           <div className="user-posts">
             {posts
@@ -74,12 +102,12 @@ export default function UserDetail() {
                     userUUID={elem.user_uuid}
                     userHandle={elem.handle}
                     userAvatar={elem.avatar}
-                    userDisplayName={elem.display_name}
                     postUUID={elem.post_uuid}
                     postTime={elem.created_at}
                     postContent={elem.content}
                     likeCount={elem.like_count}
                     commentCount={elem.comment_count}
+                    handleDelete={handleDelete(elem.post_uuid)}
                   />
                 );
               })

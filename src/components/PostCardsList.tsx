@@ -23,7 +23,6 @@ export default function PostsListCard({
   userUUID: string;
   userHandle: string;
   userAvatar: string;
-  userDisplayName: string;
   postUUID: string;
   postTime: string;
   postContent: string;

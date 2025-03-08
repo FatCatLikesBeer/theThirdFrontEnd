@@ -71,7 +71,6 @@ export default function HomePagePosts() {
                 userUUID={elem.user_uuid}
                 userHandle={elem.handle}
                 userAvatar={elem.avatar}
-                userDisplayName={elem.display_name}
                 postUUID={elem.post_uuid}
                 postTime={elem.created_at}
                 postContent={elem.content}
