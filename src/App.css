@@ -97,7 +97,6 @@ textarea:focus {
 }
 
 .user-detail-interactions {
-  width: 5rem;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -111,6 +110,13 @@ textarea:focus {
 
 .user-detail-user-name {
   margin: 0px;
+}
+
+.user-detail-link-panel {
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
 }
 
 .location {
