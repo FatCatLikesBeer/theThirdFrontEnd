@@ -19,15 +19,26 @@ const handleSchema = z.string()
   .max(24, "16 Character Max")
   .min(3, "3 Character Min")
   .regex(/^[a-zA-Z0-9_-]+$/, "Only letters, numbers, underscores, and dashes allowed");
+const linkSchema = z.string().url();
 
 export default function Settings() {
   const [userData, setUserData] = useState<UserDetailData | null>(null);
   const [handle, setHandle] = useState("");
   const [about, setAbout] = useState("");
   const [location, setLocation] = useState("");
+  const [linkBlusky, setLinkBluesky] = useState("");
+  const [linkTwitter, setLinkTwitter] = useState("");
+  const [linkInstagram, setLinkInstagram] = useState("");
+  const [linkGeneric1, setLinkGeneric1] = useState("");
+  const [linkGeneric2, setLinkGeneric2] = useState("");
   const [editHandle, setEditHandle] = useState(false);
   const [editAbout, setEditAbout] = useState(false);
   const [editLoc, setEditLoc] = useState(false);
+  const [editBlueSky, setEditBlueSky] = useState(false);
+  const [editTwitter, setEditTwitter] = useState(false);
+  const [editInstagram, setEditInstagram] = useState(false);
+  const [editLink1, setEditLink1] = useState(false);
+  const [editLink2, setEditLink2] = useState(false);
 
   const toastRef = useContext(ToastContext);
   const settingsModalRef = useContext(EditAvatarModalContext) as React.RefObject<HTMLDialogElement>;
@@ -47,6 +58,11 @@ export default function Settings() {
         setHandle(json.data.handle);
         setAbout(json.data.about);
         setLocation(json.data.location);
+        setLinkBluesky(json.data.blue_sky);
+        setLinkTwitter(json.data.twitter);
+        setLinkInstagram(json.data.instagram);
+        setLinkGeneric1(json.data.url_1);
+        setLinkGeneric2(json.data.url_2);
         return json.data;
       })
       .catch(err => {
@@ -150,9 +166,90 @@ export default function Settings() {
                 :
                 userData?.about
             } </div>
+          <p><EditIcon callBack={toggleState(setEditBlueSky)} />{"  "}
+            BlueSky: {
+              editBlueSky
+                ?
+                <EditValue
+                  originalValue={userData.blue_sky}
+                  queryName="blue_sky"
+                  editValue={linkBlusky}
+                  setEditValue={setLinkBluesky}
+                  toggleEditState={toggleState(setEditBlueSky)}
+                  toastRef={toastRef}
+                  setUserData={setUserData}
+                />
+                :
+                userData?.blue_sky
+            } </p>
+          <p><EditIcon callBack={toggleState(setEditTwitter)} />{"  "}
+            Twitter: {
+              editTwitter
+                ?
+                <EditValue
+                  originalValue={userData.twitter}
+                  queryName="twitter"
+                  editValue={linkTwitter}
+                  setEditValue={setLinkTwitter}
+                  toggleEditState={toggleState(setEditTwitter)}
+                  toastRef={toastRef}
+                  setUserData={setUserData}
+                />
+                :
+                userData?.twitter
+            } </p>
+          <p><EditIcon callBack={toggleState(setEditInstagram)} />{"  "}
+            Instagram: {
+              editInstagram
+                ?
+                <EditValue
+                  originalValue={userData.instagram}
+                  queryName="instagram"
+                  editValue={linkInstagram}
+                  setEditValue={setLinkInstagram}
+                  toggleEditState={toggleState(setEditInstagram)}
+                  toastRef={toastRef}
+                  setUserData={setUserData}
+                />
+                :
+                userData?.instagram
+            } </p>
+          <p><EditIcon callBack={toggleState(setEditLink1)} />{"  "}
+            Link 1: {
+              editLink1
+                ?
+                <EditValue
+                  originalValue={userData.url_1}
+                  queryName="url_1"
+                  editValue={linkGeneric1}
+                  setEditValue={setLinkGeneric1}
+                  toggleEditState={toggleState(setEditLink1)}
+                  toastRef={toastRef}
+                  setUserData={setUserData}
+                  isURL={true}
+                />
+                :
+                userData?.url_1
+            } </p>
+          <p><EditIcon callBack={toggleState(setEditLink2)} />{"  "}
+            Link 2: {
+              editLink2
+                ?
+                <EditValue
+                  originalValue={userData.url_2}
+                  queryName="url_2"
+                  editValue={linkGeneric2}
+                  setEditValue={setLinkGeneric2}
+                  toggleEditState={toggleState(setEditLink2)}
+                  toastRef={toastRef}
+                  setUserData={setUserData}
+                  isURL={true}
+                />
+                :
+                userData?.url_2
+            } </p>
           <p>Email: {userData?.email}</p>
           <p>Member since: {dateFormatter(userData?.created_at)}</p>
-
         </div>
         :
         ""
@@ -178,6 +275,7 @@ function EditValue({
   toastRef,
   textarea = false,
   setUserData,
+  isURL = false,
 }: {
   originalValue: string | undefined;
   queryName: string;
@@ -187,56 +285,64 @@ function EditValue({
   textarea?: boolean;
   toastRef: React.RefObject<ToastHandle | null> | null;
   setUserData: React.Dispatch<React.SetStateAction<UserDetailData | null>>;
+  isURL?: boolean;
 }) {
   function handleChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     setEditValue(event.target.value);
   }
 
+  const urlValidation = linkSchema.safeParse(editValue);
+  console.log(urlValidation);
+
   function handleConfirm() {
-    if ("handle" === queryName) {
-      const handleParse = handleSchema.safeParse(editValue);
-      if (!handleParse.success) {
-        const errorMessage = JSON.parse(handleParse.error.message)[0].message;
-        console.log(errorMessage);
-        toastRef?.current?.showToast(errorMessage, false);
-        return;
+    if (((isURL) && (!urlValidation.success)) && !(editValue === "")) {
+      toastRef?.current?.showToast("URL Invalid", false);
+    } else {
+      if ("handle" === queryName) {
+        const handleParse = handleSchema.safeParse(editValue);
+        if (!handleParse.success) {
+          const errorMessage = JSON.parse(handleParse.error.message)[0].message;
+          console.log(errorMessage);
+          toastRef?.current?.showToast(errorMessage, false);
+          return;
+        }
       }
-    }
 
-    const fetchURL = apiURLFormatterPUT(queryName, editValue);
-    fetch(fetchURL, {
-      method: "PUT",
-      credentials: "include",
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error("Request error 😩");
-        }
+      const fetchURL = apiURLFormatterPUT(queryName, editValue);
+      fetch(fetchURL, {
+        method: "PUT",
+        credentials: "include",
       })
-      .then((json) => {
-        if (json.success) {
-          const firstLetter = queryName.slice(0, 1).toUpperCase();
-          const capitalized = `${firstLetter}${queryName.slice(1)}`
-          toastRef?.current?.showToast(`${capitalized} changed!`, true);
-          setEditValue(json.data.result);
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error("Request error 😩");
+          }
+        })
+        .then((json) => {
+          if (json.success) {
+            const firstLetter = queryName.slice(0, 1).toUpperCase();
+            const capitalized = `${firstLetter}${queryName.slice(1)}`
+            toastRef?.current?.showToast(`${capitalized} changed!`, true);
+            setEditValue(json.data.result);
 
-          setUserData((previousValue) => {
-            const newData = { ...previousValue } as UserDetailData;
-            newData[queryName] = json.data.result;
-            return newData;
-          });
+            setUserData((previousValue) => {
+              const newData = { ...previousValue } as UserDetailData;
+              newData[queryName] = json.data.result;
+              return newData;
+            });
 
+            toggleEditState();
+          } else {
+            throw new Error(json.message);
+          }
+        })
+        .catch((err: Error) => {
+          toastRef?.current?.showToast(err.message, false);
           toggleEditState();
-        } else {
-          throw new Error(json.message);
-        }
-      })
-      .catch((err: Error) => {
-        toastRef?.current?.showToast(err.message, false);
-        toggleEditState();
-      });
+        });
+    }
   }
 
   function handleCancel() {

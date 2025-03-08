@@ -97,9 +97,9 @@ export default function UserDetail() {
             <p>User since: {user.created_at}</p>
             <p>{user.about}</p>
             <div className="user-detail-link-panel">
-              {user.blue_sky ? <a href={user.blue_sky} target="_blank"><BlueSkyIcon /></a> : null}
-              {user.twitter ? <a href={user.twitter} target="_blank"><TwitterIcon /></a> : null}
-              {user.instagram ? <a href={user.instagram} target="_blank"><InstagramIcon /></a> : null}
+              {user.blue_sky ? <a href={`https://${user.blue_sky}.bsky.social`} target="_blank"><BlueSkyIcon /></a> : null}
+              {user.twitter ? <a href={`https://www.twitter.com/${user.twitter}`} target="_blank"><TwitterIcon /></a> : null}
+              {user.instagram ? <a href={`https://www.instagram.com/${user.instagram}`} target="_blank"><InstagramIcon /></a> : null}
               {user.url_1 ? <a href={user.url_1} target="_blank"><GenericLinkIcon /></a> : null}
               {user.url_2 ? <a href={user.url_2} target="_blank"><GenericLinkIcon /></a> : null}
             </div>
