@@ -29,6 +29,7 @@ function App() {
   const authModalRef = useRef<HTMLDialogElement | null>(null);
   const settingsModalRef = useRef<HTMLDialogElement | null>(null);
   const toastRef = useRef<ToastHandle | null>(null);
+  const appContentRef = useRef<HTMLDivElement | null>(null);
   const [uuid, setUUID] = useState<string | null>(localStorage.getItem("uuid"));
 
   return (
@@ -42,8 +43,8 @@ function App() {
                 <SettingsModal />
                 <TrashModal />
                 <Toast />
-                <SideBar />
-                <div className="app-content-column">
+                <SideBar appContentRef={appContentRef} />
+                <div ref={appContentRef} className="app-content-column">
                   <Routes>
                     <Route path="/" element={<HomePagePosts />} />
                     <Route path="/mystuff" element={<MyStuff />} />

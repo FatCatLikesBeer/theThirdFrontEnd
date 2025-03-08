@@ -25,9 +25,7 @@ export default function Settings() {
   const [handle, setHandle] = useState("");
   const [about, setAbout] = useState("");
   const [location, setLocation] = useState("");
-  // const [displayName, setDisplayName] = useState("");
   const [editHandle, setEditHandle] = useState(false);
-  // const [editDisplay, setEditDisplay] = useState(false);
   const [editAbout, setEditAbout] = useState(false);
   const [editLoc, setEditLoc] = useState(false);
 
@@ -47,7 +45,6 @@ export default function Settings() {
         if (!json.success) { throw new Error(json.message) }
         setUserData({ ...json.data });
         setHandle(json.data.handle);
-        // setDisplayName(json.data.display_name);
         setAbout(json.data.about);
         setLocation(json.data.location);
         return json.data;
@@ -120,22 +117,6 @@ export default function Settings() {
               :
               userData?.handle}
           </p>
-          {/* <p><EditIcon callBack={toggleState(setEditDisplay)} />{"  "} */}
-          {/*   Display Name: { */}
-          {/*     editDisplay */}
-          {/*       ? */}
-          {/*       <EditValue */}
-          {/*         originalValue={userData.display_name} */}
-          {/*         queryName="display_name" */}
-          {/*         editValue={displayName} */}
-          {/*         setEditValue={setDisplayName} */}
-          {/*         toggleEditState={toggleState(setEditDisplay)} */}
-          {/*         toastRef={toastRef} */}
-          {/*         setUserData={setUserData} */}
-          {/*       /> */}
-          {/*       : */}
-          {/*       userData?.display_name */}
-          {/*   }</p> */}
           <p><EditIcon callBack={toggleState(setEditLoc)} />{"  "}
             Location: {
               editLoc
@@ -171,6 +152,7 @@ export default function Settings() {
             } </div>
           <p>Email: {userData?.email}</p>
           <p>Member since: {dateFormatter(userData?.created_at)}</p>
+
         </div>
         :
         ""

@@ -257,7 +257,7 @@ textarea:focus {
 }
 
 .app-content-column {
-  width: 650px;
+  width: 455px;
   padding: 2rem;
 }
 
@@ -437,4 +437,59 @@ textarea:focus {
 
 .button-green {
   background-color: lightgreen;
+}
+
+.mobile-menu-component-outside {
+  position: fixed;
+  bottom: 12px;
+  left: 12px;
+  border-radius: 6px;
+  background-color: var(--background-color);
+  z-index: 9999;
+  box-shadow: 2px 2px 8px grey;
+}
+
+.mobile-menu-component-inside {
+  margin: 3px;
+  border: solid grey 1px;
+  border-radius: 5px;
+}
+
+@media screen and (max-width: 700px) {
+  .app-full-page {
+    justify-content: center;
+  }
+
+  .post-content > * {
+    font-size: 0.8rem;
+  }
+
+  .blip {
+    font-size: 1.4rem;
+    margin: 4px 0;
+  }
+
+  .post-card-list-container, .create-post-container {
+    margin-bottom: 4px;
+  }
+
+  .post-card-list-padding {
+    margin: 8px;
+  }
+
+  .sidebar-container {
+    margin: 0;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 9998;
+    padding: 14px;
+    height: 1024px;
+    border-right: solid grey 1px;
+    background-color: var(--background-color);
+  }
+
+  .app-content-column {
+    padding: 8px;
+  }
 }

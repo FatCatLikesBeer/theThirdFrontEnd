@@ -3,7 +3,11 @@
  * @prop {boolean} fill - default false, true fills icon
  * @prop {number} size - size of icon
  */
-export default function ThumbsUp({ fill = false, size = 16 }: { fill?: boolean; size?: number }) {
+export default function ThumbsUp({
+  fill = false, size = 16,
+}: {
+  fill?: boolean; size?: number
+}) {
   return (
     <>
       <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} fill="currentColor" className="bi bi-hand-thumbs-up" viewBox="0 0 16 16">
