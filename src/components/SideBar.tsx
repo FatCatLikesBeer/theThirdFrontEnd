@@ -1,4 +1,4 @@
-import { useContext, useRef, useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Link } from "react-router";
 
 import AuthContext from "../context/AuthContext";
@@ -8,13 +8,6 @@ const apiURL = String(import.meta.env.VITE_API_URL) + "/api";
 
 export default function SideBar() {
   const [useDarkTheme, setUseDarkTheme] = useState(localStorage.getItem("useDarkTheme"));
-  const divRef = useRef<HTMLHeadingElement | null>(null);
-  const appTitleRef = useRef<HTMLHeadingElement | null>(null);
-  const usersRef = useRef<HTMLParagraphElement | null>(null);
-  const searchRef = useRef<HTMLParagraphElement | null>(null);
-  const friendsRef = useRef<HTMLParagraphElement | null>(null);
-  const myStuffRef = useRef<HTMLParagraphElement | null>(null);
-  const settingsRef = useRef<HTMLParagraphElement | null>(null);
   const authModalRef = useContext(AuthModalContext);
   const { uuid } = useContext(AuthContext);
 
@@ -53,18 +46,18 @@ export default function SideBar() {
   function loginSignupCallback() { authModalRef?.current?.showModal() }
 
   return (
-    <div className="sidebar-container" ref={divRef}>
-      <Link to="/"><h1 className="app-title sidebar-element" ref={appTitleRef}>App</h1></Link>
+    <div className="sidebar-container">
+      <Link to="/"><h1 className="app-title sidebar-element">App</h1></Link>
       <p className="app-tagline">Another Platform for Posting</p>
       <button className="sidebar-create-post-button">Create Post</button>
-      <Link to="/users"><p className="sidebar-element" ref={usersRef}>Users</p></Link>
-      <Link to="/search"><p className="sidebar-element" ref={searchRef}>Search</p></Link>
+      <Link to="/users"><p className="sidebar-element">Users</p></Link>
+      <Link to="/search"><p className="sidebar-element">Search</p></Link>
       {uuid
         ?
         <>
-          <Link to="/friends"><p className="sidebar-element" ref={friendsRef}>Friends</p></Link>
-          <Link to="/mystuff"><p className="sidebar-element" ref={myStuffRef}>My Stuff</p></Link>
-          <Link to="/settings"><p className="sidebar-element" ref={settingsRef}>Settings</p></Link>
+          <Link to="/friends"><p className="sidebar-element">Friends</p></Link>
+          <Link to="/mystuff"><p className="sidebar-element">My Stuff</p></Link>
+          <Link to="/settings"><p className="sidebar-element">Settings</p></Link>
           <p className="pointer"><a onClick={logoutCallback}>Logout</a></p>
         </>
         :
