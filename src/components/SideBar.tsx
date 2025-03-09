@@ -99,6 +99,7 @@ export default function SideBar({
           <Link to="/"><h1 className="app-title sidebar-element">App</h1></Link>
           <p className="app-tagline">Another Platform for Posting</p>
           <button className="sidebar-create-post-button">Create Post</button>
+          <p className="pointer"><a onClick={toggleTheme}>Use {"true" === useDarkTheme ? "Light" : "Dark"} Theme</a></p>
           <Link to="/users"><p className="sidebar-element">Users</p></Link>
           <Link to="/search"><p className="sidebar-element">Search</p></Link>
           {uuid
@@ -112,7 +113,6 @@ export default function SideBar({
             :
             <p className="pointer"><a onClick={loginSignupCallback}>Login/Signup</a></p>
           }
-          <p className="pointer"><a onClick={toggleTheme}>Use {"true" === useDarkTheme ? "Light" : "Dark"} Theme</a></p>
         </div>
       }
     </>

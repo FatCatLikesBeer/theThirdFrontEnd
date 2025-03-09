@@ -15,6 +15,7 @@ import PersonMinus from "./icons/PersonMinus";
 
 import TrashModalContext from "../context/TrashModalContext";
 import AuthContext from "../context/AuthContext";
+import ToastContext from "../context/ToastContext";
 
 const apiHost = String(import.meta.env.VITE_API_URL);
 
@@ -24,6 +25,7 @@ export default function UserDetail() {
   const [friendsList, setFriendsList] = useState<FriendListData[] | null>(null);
   const [isFriend, setIsFriend] = useState(false);
   const trashModalRef = useContext(TrashModalContext) as React.RefObject<HTMLDialogElement>;
+  const toastModalRef = useContext(ToastContext);
   const { uuid } = useContext(AuthContext);
   const params = useParams();
 
@@ -117,6 +119,54 @@ export default function UserDetail() {
     setIsFriend(match);
   }
 
+  async function toggleFriend(
+  ) {
+    const addDeleteFriendEndpoint = apiHost + "/api/friends";
+    if (isFriend) {
+      const method = "DELETE";
+      try {
+        const deleteFriendFetch = await fetch(`${addDeleteFriendEndpoint}/${params.uuid}`, { method, credentials: "include" });
+        const deleteFriendResult = await deleteFriendFetch.json();
+        if (!deleteFriendFetch.ok) { throw new Error("Error deleting from friends list") }
+        if (!deleteFriendResult.success) { throw new Error(deleteFriendResult.message) }
+        if (friendsList) {
+          const prunedFriendsList: FriendListData[] = [];
+          friendsList.map((elem) => {
+            if (elem.uuid != params.uuid) { prunedFriendsList.push(elem) }
+          });
+          setFriendsList([...prunedFriendsList]);
+          setIsFriend(false);
+          isFriendParser(params.uuid, prunedFriendsList, setIsFriend);
+          if (user) toastModalRef?.current?.showToast(`${user.handle} removed from friends list.`, true);
+        }
+      } catch (err: any) {
+        console.error(err);
+        toastModalRef?.current?.showToast(err.message, false);
+      }
+    } else {
+      const method = "POST";
+      fetch(`${addDeleteFriendEndpoint}/${params.uuid}`, { method, credentials: "include" })
+        .then(r => {
+          if (r.ok) { return r.json() }
+          else { throw new Error("Error adding friend") }
+        })
+        .then(j => {
+          if (j.success) {
+            const newFriendList: FriendListData[] = [...friendsList as FriendListData[]];
+            newFriendList.push(j.data);
+            setFriendsList([...newFriendList]);
+            setIsFriend(true);
+            if (user) toastModalRef?.current?.showToast(`${user.handle} added as friend!`, true);
+          } else {
+            throw new Error(j.message);
+          }
+        })
+        .catch((err: Error) => {
+          toastModalRef?.current?.showToast(err.message, false);
+        });
+    }
+  }
+
   return (
     <>
       {user
@@ -128,7 +178,7 @@ export default function UserDetail() {
               <h1 className="user-detail-user-name">{user.handle}</h1>
               {friendsList && uuid != params.uuid &&
                 <div className="user-detail-friend-icon">
-                  {isFriend ? <PersonMinus size={28} /> : <PersonPlus size={28} />}
+                  {isFriend ? <PersonMinus callBack={toggleFriend} size={28} /> : <PersonPlus callBack={toggleFriend} size={28} />}
                 </div>
               }
             </div>
@@ -149,7 +199,7 @@ export default function UserDetail() {
               </div>
             </div>
             <p>User since: {user.created_at}</p>
-            <p>{user.about}</p>
+            <p style={{ margin: "8px 24px" }}>{user.about}</p>
             <div className="user-detail-link-panel">
               {user.blue_sky ? <a href={`https://${user.blue_sky}.bsky.social`} target="_blank"><BlueSkyIcon /></a> : null}
               {user.twitter ? <a href={`https://www.twitter.com/${user.twitter}`} target="_blank"><TwitterIcon /></a> : null}
@@ -188,5 +238,3 @@ export default function UserDetail() {
     </>
   );
 }
-
-

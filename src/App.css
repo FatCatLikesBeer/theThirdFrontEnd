@@ -547,4 +547,11 @@ textarea:focus {
   .app-content-column {
     padding: 8px;
   }
+
+  .toast {
+    left: 0;
+    right: 0;
+    margin: 16px auto;
+    align-self: center;
+  }
 }

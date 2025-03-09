@@ -64,9 +64,8 @@ function App() {
   );
 }
 
-export default App
+export default App;
 
-// TODO: Add ability to add friend from user detail page
 // TODO: Implement likes!
 // TODO: Implement Search
 // TODO: PageNotFound component should have a timer before it procs
