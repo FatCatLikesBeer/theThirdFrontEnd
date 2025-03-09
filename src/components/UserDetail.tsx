@@ -10,20 +10,27 @@ import TwitterIcon from "./icons/TwitterIcon";
 import InstagramIcon from "./icons/InstagramIcon";
 import BlueSkyIcon from "./icons/BlueSkyIcon";
 import GenericLinkIcon from "./icons/GenericLinkIcon";
+import PersonPlus from "./icons/PersonPlus";
+import PersonMinus from "./icons/PersonMinus";
 
 import TrashModalContext from "../context/TrashModalContext";
+import AuthContext from "../context/AuthContext";
 
-const apiURL = String(import.meta.env.VITE_API_URL) + "/api/posts/";
+const apiHost = String(import.meta.env.VITE_API_URL);
 
 export default function UserDetail() {
   const [user, setUser] = useState<UserDetailData | null>(null);
   const [posts, setPosts] = useState<PostListData[] | null>(null);
+  const [friendsList, setFriendsList] = useState<FriendListData[] | null>(null);
+  const [isFriend, setIsFriend] = useState(false);
   const trashModalRef = useContext(TrashModalContext) as React.RefObject<HTMLDialogElement>;
+  const { uuid } = useContext(AuthContext);
   const params = useParams();
 
   useEffect(() => {
-    // Get user
-    fetch(`http://localhost:3000/api/users/${params.uuid}`)
+    // Get user details
+    const apiUserURL = `${apiHost}/api/users/`;
+    fetch(`${apiUserURL}${params.uuid}`)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -43,7 +50,8 @@ export default function UserDetail() {
       });
 
     // get posts
-    fetch(`http://localhost:3000/api/posts?user=${params.uuid}`)
+    const apiPostsURL = `${apiHost}/api/posts`
+    fetch(`${apiPostsURL}?user=${params.uuid}`)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -58,17 +66,55 @@ export default function UserDetail() {
           console.error(json.response.message);
         }
       });
+
+    // Get Your friends list
+    const apiFriendsURL = `${apiHost}/api/friends/${uuid}`;
+    fetch(apiFriendsURL)
+      .then(r => {
+        if (r.ok) {
+          return r.json();
+        } else {
+          throw new Error("Request Error");
+        }
+      })
+      .then((j: APIResponse<FriendListData[]>) => {
+        if (j.success) {
+          const newFriendList = [...j.data as FriendListData[]];
+          setFriendsList(newFriendList);
+          isFriendParser(params.uuid, newFriendList, setIsFriend);
+        } else {
+          throw new Error(j.message);
+        }
+      })
+      .catch((err: Error) => {
+        setFriendsList(null);
+        console.error(err.message);
+      });
   }, []);
 
   function handleDelete(postUUID: string) {
     return () => {
       const returnValueJSON = {
-        apiURL: apiURL + postUUID,
+        apiURL: apiHost + "/api/posts/" + postUUID,
         postUUID: postUUID,
       }
       trashModalRef.current.returnValue = JSON.stringify(returnValueJSON);
       trashModalRef.current.showModal();
     }
+  }
+
+  function isFriendParser(
+    viewUserUUID: string | undefined,
+    friendsList: FriendListData[] | null,
+    setIsFriend: React.Dispatch<React.SetStateAction<boolean>>
+  ) {
+    let match = false;
+    if (friendsList && viewUserUUID) {
+      friendsList.forEach((elem) => {
+        if (viewUserUUID === elem.uuid) { match = true }
+      });
+    }
+    setIsFriend(match);
   }
 
   return (
@@ -77,7 +123,15 @@ export default function UserDetail() {
         ?
         <div className="user-detail-container">
           <div className="user-detail-card">
-            <h1 className="user-detail-user-name">{user.handle}</h1>
+            <div className="user-detail-head-card">
+              {uuid != params.uuid && <div className="user-detail-friend-icon" />}
+              <h1 className="user-detail-user-name">{user.handle}</h1>
+              {friendsList && uuid != params.uuid &&
+                <div className="user-detail-friend-icon">
+                  {isFriend ? <PersonMinus size={28} /> : <PersonPlus size={28} />}
+                </div>
+              }
+            </div>
             {user.location && <p className="location">{user.location}</p>}
             <img className="user-avatar avatar-detail" src={user.avatar} style={{ margin: "auto" }} />
             <div className="user-detail-interactions">

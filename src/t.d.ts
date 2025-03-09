@@ -44,6 +44,13 @@ type PostComments = {
   [likes: string]: number;
 }
 
+type FriendListData = {
+  uuid: string;
+  handle: string;
+  avatar: string | null;
+  created_at: string;
+}
+
 type APIResponse<T> = {
   success: boolean;
   path: string;

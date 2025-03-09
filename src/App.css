@@ -119,6 +119,23 @@ textarea:focus {
   gap: 1rem;
 }
 
+.user-detail-head-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.user-detail-user-name {
+  flex-grow: 3;
+  text-align: center;
+}
+
+.user-detail-friend-icon {
+  width: 2rem;
+}
+
 .location {
   margin-top: 4px;
   margin-bottom: 12px;

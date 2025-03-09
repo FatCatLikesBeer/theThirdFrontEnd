@@ -66,9 +66,9 @@ function App() {
 
 export default App
 
-// TODO: Finetune user detail page
 // TODO: Add ability to add friend from user detail page
 // TODO: Implement likes!
+// TODO: Implement Search
 // TODO: PageNotFound component should have a timer before it procs
 // TODO: figure out why you have a JWT in frontend // What the fuck does this mean?
 //
