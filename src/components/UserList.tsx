@@ -24,7 +24,9 @@ export default function UserList() {
             avatar={avatar}
             displayName={elem.display_name}
             uuid={elem.uuid}
-            key={Math.floor(Math.random() * 10000000)} />
+            key={crypto.randomUUID()}
+            createdAt={elem.created_at}
+          />
         );
       })}
     </div>
