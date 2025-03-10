@@ -68,8 +68,7 @@ function App() {
 
 export default App;
 
-// TODO: Implement likes!
-// TODO: Implement Search
+// TODO: Commenting on posts should happen from home page
 // TODO: PageNotFound component should have a timer before it procs
 // TODO: figure out why you have a JWT in frontend // What the fuck does this mean?
 //

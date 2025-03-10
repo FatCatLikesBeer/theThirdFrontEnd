@@ -61,6 +61,7 @@ export default function HomePagePosts() {
   return (
     <PostListDataContext value={setPosts}>
       <div className="home-page-posts">
+        <div id="create-post" />
         <HomePageInput />
         {posts
           ?
