@@ -16,6 +16,7 @@ import HomePagePosts from "./components/HomePagePosts.tsx";
 import Settings from "./components/Settings.tsx";
 import MyStuff from "./components/MyStuff.tsx";
 import Toast from "./components/Toast.tsx";
+import Search from "./components/Search.tsx";
 import { Route, Routes } from "react-router";
 
 import AuthModal from "./components/AuthModal.tsx";
@@ -52,6 +53,7 @@ function App() {
                     <Route path="/users/:uuid" element={<UserDetail />} />
                     <Route path="/posts/:uuid" element={<PostDetail />} />
                     <Route path="/settings" element={<Settings />} />
+                    <Route path="/search" element={<Search />} />
                     <Route path="/*" element={<PageNotFound />} />
                   </Routes>
                 </div>

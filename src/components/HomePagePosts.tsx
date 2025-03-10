@@ -13,7 +13,7 @@ export default function HomePagePosts() {
   const trashModalRef = useContext(TrashModalContext) as React.RefObject<HTMLDialogElement>;
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/posts")
+    fetch("http://localhost:3000/api/posts", { credentials: "include" })
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -77,6 +77,8 @@ export default function HomePagePosts() {
                 likeCount={elem.like_count}
                 commentCount={elem.comment_count}
                 handleDelete={handleDelete(elem.post_uuid)}
+                setStateFunction={setPosts}
+                postLiked={elem.post_liked}
               />
             );
           })

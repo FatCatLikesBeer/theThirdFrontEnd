@@ -19,6 +19,8 @@ export default function PostsListCard({
   likeCount,
   commentCount,
   handleDelete,
+  postLiked,
+  setStateFunction,
 }: {
   userUUID: string;
   userHandle: string;
@@ -28,7 +30,9 @@ export default function PostsListCard({
   postContent: string;
   likeCount: number;
   commentCount: number;
+  postLiked: boolean;
   handleDelete: () => void;
+  setStateFunction: React.Dispatch<React.SetStateAction<PostListData[] | null>>;
 }) {
   const avatar = avatarFormatter(userAvatar);
   const date = dateFormatter(postTime);
@@ -62,7 +66,7 @@ export default function PostsListCard({
           size={20}
           likeCount={likeCount}
           commentCount={commentCount}
-          likeFill={false}
+          likeFill={postLiked}
           likeCallback={handleLike}
           commentCallback={handleComment}
         />

@@ -19,6 +19,7 @@ type PostListData = {
   like_count: number;
   post_uuid: string;
   user_uuid: string;
+  post_liked: boolean;
 }
 
 type PostDetailData = {
