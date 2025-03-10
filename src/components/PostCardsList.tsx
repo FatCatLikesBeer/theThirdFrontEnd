@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import { Link } from 'react-router';
 
 import avatarFormatter from "../library/avatarFormatter";
@@ -6,8 +7,11 @@ import dateFormatter from "../library/dateFormatter";
 import ReactionPanel from './icons/ReactionPanel';
 import Trash from './icons/Trash';
 
+import ToastContext from '../context/ToastContext';
+
 const contentLengthLimit = 150;
 const localUUID = String(localStorage.getItem('uuid'));
+const apiURL = String(import.meta.env.VITE_API_URL);
 
 export default function PostsListCard({
   userUUID,
@@ -36,10 +40,50 @@ export default function PostsListCard({
 }) {
   const avatar = avatarFormatter(userAvatar);
   const date = dateFormatter(postTime);
+  const toastRef = useContext(ToastContext);
   function handleComment() { window.open(`/posts/${postUUID}`, "_self") }
 
-  function handleLike() {
-    // handle the link
+  async function handleLike() {
+    const likesEndpoint = `${apiURL}/api/posts/${postUUID}/likes`;
+    try {
+      if (postLiked) {
+        const result = await fetch(likesEndpoint, { method: "DELETE", credentials: "include" });
+        const json: APIResponse<null> = await result.json();
+        if (!result.ok) { throw new Error("Could not delete like") }
+        if (!json.success) { throw new Error(json.message) }
+        setStateFunction((prevValue) => {
+          if (prevValue) {
+            const newValue = prevValue.map(elem => {
+              return elem.post_uuid === postUUID ?
+                { ...elem, post_liked: false, like_count: elem.like_count - 1, }
+                : elem;
+            });
+            return newValue;
+          } else {
+            return prevValue;
+          }
+        });
+      } else {
+        const result = await fetch(likesEndpoint, { method: "POST", credentials: "include" });
+        const json: APIResponse<null> = await result.json();
+        if (!result.ok) { throw new Error("Could not like post") }
+        if (!json.success) { throw new Error(json.message) }
+        setStateFunction((prevValue) => {
+          if (prevValue) {
+            const newValue = prevValue.map(elem => {
+              return elem.post_uuid === postUUID ?
+                { ...elem, post_liked: true, like_count: elem.like_count + 1, }
+                : elem;
+            });
+            return newValue;
+          } else {
+            return prevValue;
+          }
+        });
+      }
+    } catch (err: any) {
+      toastRef?.current?.showToast(err.message, false);
+    }
   }
 
   function contentAsBlip(content: string): boolean {

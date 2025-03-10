@@ -32,7 +32,7 @@ export default function UserDetail() {
   useEffect(() => {
     // Get user details
     const apiUserURL = `${apiHost}/api/users/`;
-    fetch(`${apiUserURL}${params.uuid}`)
+    fetch(`${apiUserURL}${params.uuid}`, { credentials: "include" })
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -53,7 +53,7 @@ export default function UserDetail() {
 
     // get posts
     const apiPostsURL = `${apiHost}/api/posts`
-    fetch(`${apiPostsURL}?user=${params.uuid}`)
+    fetch(`${apiPostsURL}?user=${params.uuid}`, { credentials: "include" })
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -71,7 +71,7 @@ export default function UserDetail() {
 
     // Get Your friends list
     const apiFriendsURL = `${apiHost}/api/friends/${uuid}`;
-    fetch(apiFriendsURL)
+    fetch(apiFriendsURL, { credentials: "include" })
       .then(r => {
         if (r.ok) {
           return r.json();
@@ -224,6 +224,8 @@ export default function UserDetail() {
                     likeCount={elem.like_count}
                     commentCount={elem.comment_count}
                     handleDelete={handleDelete(elem.post_uuid)}
+                    postLiked={elem.post_liked}
+                    setStateFunction={setPosts}
                   />
                 );
               })
