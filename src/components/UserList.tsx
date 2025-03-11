@@ -15,7 +15,7 @@ export default function UserList() {
 
   return (
     <div>
-      {userList.map((elem) => {
+      {userList.toReversed().map((elem) => {
 
         let avatar = avatarFormatter(elem.avatar);
 

@@ -7,7 +7,6 @@ export default function UserListCard(props: any) {
   const handle = props.handle;
   const avatar = props.avatar;
   const uuid = props.uuid;
-  const displayName = props.displayName;
   const friend = props.friend;
   const createdAt = props.createdAt;
 
@@ -15,30 +14,33 @@ export default function UserListCard(props: any) {
 
   return (
     <Link to={`/users/${uuid}`}>
-      <div style={styles.cardContainer}>
-        <div>
+      <div className="post-card-list-container">
+        <div style={paddingContainer}>
           <img className="user-avatar avatar-list" src={avatar} />
-        </div>
-        <div>
-          <p>{handle}</p>
-          <p>{displayName}</p>
-          {friend
-            ?
-            <p>Friend Since: {displayDate}</p>
-            :
-            <p>User Since: {displayDate}</p>
-          }
+          <div style={textContainer}>
+            <p style={text}>{handle}</p>
+            <p style={text}>{friend ? "Friend" : "User"} Since: {displayDate}</p>
+          </div>
         </div>
       </div>
     </Link>
   );
 }
 
-const styles: Record<string, CSSProperties> = {
-  cardContainer: {
-    display: "flex",
-    flexDirection: "row",
-    borderRadius: "0.6rem",
-    border: "red 2px solid"
-  }
+const text: CSSProperties = {
+  margin: "0",
+}
+
+const textContainer: CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-around",
+  marginLeft: "8px",
+}
+
+const paddingContainer: CSSProperties = {
+  padding: "8px",
+  display: "flex",
+  flexDirection: "row",
+  alignContent: "center",
 }

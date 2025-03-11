@@ -70,7 +70,6 @@ function App() {
 
 export default App;
 
-// TODO: Friends page: make top selector look nice
 // TODO: User list component: make it look good, get rid of underlines, add location
 // TODO: Commenting on posts should happen from home page
 // TODO: PageNotFound component should have a timer before it procs

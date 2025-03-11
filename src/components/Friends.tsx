@@ -1,4 +1,9 @@
-import { useState, useContext, useEffect } from "react";
+import {
+  useState,
+  useContext,
+  useEffect,
+  useRef,
+} from "react";
 
 import PostsListCard from "./PostCardsList";
 import UserListCard from "./UserListCard";
@@ -18,6 +23,8 @@ export default function Friends() {
   const [selection, setSelection] = useState("friends");
   const [friendsPosts, setFriendsPosts] = useState<PostListData[] | null>(null);
   const [friendsList, setFriendsList] = useState<FriendListData[] | null>(null);
+  const friendsButtonRef = useRef<HTMLButtonElement | null>(null);
+  const postsButtonRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     (async function() {
@@ -26,11 +33,33 @@ export default function Friends() {
     })();
   }, []);
 
+  // Toggle selected button highlighting
+  useEffect(() => {
+    const classSelection = "friends-component-button-selected";
+    if (selection === "friends") {
+      friendsButtonRef?.current?.classList.add(classSelection);
+      postsButtonRef?.current?.classList.remove(classSelection);
+    } else {
+      friendsButtonRef?.current?.classList.remove(classSelection);
+      postsButtonRef?.current?.classList.add(classSelection);
+    }
+  }, [selection]);
+
   return (
     <>
-      <div style={{ margin: "16px" }}>
-        <button type="button" onClick={() => { setSelection("posts"); console.log("posts clicked") }}>Posts</button>
-        <button type="button" onClick={() => { setSelection("friends"); console.log("friends clicked") }}>Friends</button>
+      <div className="friends-button-contianer">
+        <button
+          type="button"
+          className="friends-component-button"
+          onClick={() => { setSelection("posts") }}
+          ref={postsButtonRef}
+        >Posts</button>
+        <button
+          type="button"
+          className="friends-component-button friends-component-button-selected"
+          onClick={() => { setSelection("friends") }}
+          ref={friendsButtonRef}
+        >Friends</button>
       </div>
       <div>
         {selection === "posts" ?
@@ -56,7 +85,7 @@ export default function Friends() {
 
           :
           friendsList != null ?
-            friendsList.map((elem: FriendListData) => {
+            friendsList.toReversed().map((elem: FriendListData) => {
               let avatar = avatarFormatter(elem.avatar);
               return (
                 <UserListCard handle={elem.handle}
