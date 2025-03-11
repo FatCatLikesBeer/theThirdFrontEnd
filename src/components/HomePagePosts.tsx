@@ -79,6 +79,7 @@ export default function HomePagePosts() {
                 commentCount={elem.comment_count}
                 handleDelete={handleDelete(elem.post_uuid)}
                 setStateFunction={setPosts}
+                comments={elem.comments}
                 postLiked={elem.post_liked}
               />
             );

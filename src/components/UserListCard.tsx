@@ -14,7 +14,7 @@ export default function UserListCard(props: any) {
 
   return (
     <Link to={`/users/${uuid}`}>
-      <div className="post-card-list-container">
+      <div className="user-card-list-container">
         <div style={paddingContainer}>
           <img className="user-avatar avatar-list" src={avatar} />
           <div style={textContainer}>

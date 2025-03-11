@@ -406,11 +406,21 @@ textarea:focus {
   margin: 4px 0;
 }
 
-.post-card-list-container {
+.user-card-list-container {
   border: 1px solid var(--accent-color);
   border-radius: 0.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 4px;
   max-width: 28rem;
+}
+
+.post-card-list-border {
+  border: 1px solid var(--accent-color);
+  border-radius: 0.5rem;
+  max-width: 28rem;
+}
+
+.post-card-list-container {
+  margin-bottom: 2rem;
 }
 
 .post-card-list-padding {

@@ -1,5 +1,7 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Link } from 'react-router';
+
+import CommentsCard from './CommentsCard';
 
 import avatarFormatter from "../library/avatarFormatter";
 import dateFormatter from "../library/dateFormatter";
@@ -24,6 +26,7 @@ export default function PostsListCard({
   commentCount,
   handleDelete,
   postLiked,
+  comments,
   setStateFunction,
 }: {
   userUUID: string;
@@ -36,12 +39,13 @@ export default function PostsListCard({
   commentCount: number;
   postLiked: boolean;
   handleDelete: () => void;
+  comments: PostComments[];
   setStateFunction: React.Dispatch<React.SetStateAction<PostListData[] | null>>;
 }) {
   const avatar = avatarFormatter(userAvatar);
   const date = dateFormatter(postTime);
   const toastRef = useContext(ToastContext);
-  function handleComment() { window.open(`/posts/${postUUID}`, "_self") }
+  const [showComments, setShowComments] = useState(true);
 
   async function handleLike() {
     const likesEndpoint = `${apiURL}/api/posts/${postUUID}/likes`;
@@ -90,31 +94,75 @@ export default function PostsListCard({
     return contentLengthLimit >= content.length;
   }
 
+  async function handleComment() {
+    if (comments.length <= 0) {
+      const fetchCommentsAPI = `${apiURL}/api/posts/${postUUID}/comments`;
+      try {
+        const response = await fetch(fetchCommentsAPI, { credentials: "include" });
+        const json: APIResponse<PostComments[]> = await response.json();
+        if (!response.ok) { throw new Error("Request error") }
+        if (!json.success) { throw new Error(json.message) }
+        setStateFunction((prevValue) => {
+          let newValue = [...prevValue as PostListData[]];
+          newValue = newValue.map((elem) => {
+            return elem.post_uuid === postUUID ? { ...elem, comments: [...json.data as PostComments[]] } : elem;
+          });
+          return newValue;
+        });
+      } catch (err: any) {
+        toastRef?.current?.showToast(err.message, false);
+      }
+    } else {
+      setShowComments(prev => !prev);
+    }
+  }
+
   return (
-    <div className="post-card-list-container">
-      <div className="post-card-list-padding">
-        <div className="flex-space-between">
-          <div className="user-header-detail">
-            <img className="user-avatar avatar-list" src={avatar} alt={`Avatar for user ${userHandle}`} />
-            <div className="user-header-names">
-              <p><Link to={`/users/${userUUID}`}>{userHandle}</Link></p>
-              <p>{date}</p>
+    <>
+      <div className="post-card-list-container">
+        <div className="post-card-list-border">
+          <div className="post-card-list-padding">
+            <div className="flex-space-between">
+              <div className="user-header-detail">
+                <img className="user-avatar avatar-list" src={avatar} alt={`Avatar for user ${userHandle}`} />
+                <div className="user-header-names">
+                  <p><Link to={`/users/${userUUID}`}>{userHandle}</Link></p>
+                  <p>{date}</p>
+                </div>
+              </div>
+              {localUUID === userUUID ? <Trash callBack={handleDelete} /> : null}
             </div>
+            <div className="post-content">
+              <p className={contentAsBlip(postContent) ? "blip" : ""} >{postContent}</p>
+            </div>
+            <ReactionPanel
+              size={20}
+              likeCount={likeCount}
+              commentCount={commentCount}
+              likeFill={postLiked}
+              likeCallback={handleLike}
+              commentCallback={handleComment}
+            />
           </div>
-          {localUUID === userUUID ? <Trash callBack={handleDelete} /> : null}
         </div>
-        <div className="post-content">
-          <p className={contentAsBlip(postContent) ? "blip" : ""} >{postContent}</p>
-        </div>
-        <ReactionPanel
-          size={20}
-          likeCount={likeCount}
-          commentCount={commentCount}
-          likeFill={postLiked}
-          likeCallback={handleLike}
-          commentCallback={handleComment}
-        />
+        {(comments.length > 0) && showComments
+          ?
+          <>
+            <p>Comment input element goes here</p>
+            {
+              comments.map(() => {
+                return (
+                  <CommentsCard
+                    key={crypto.randomUUID()}
+                  />
+                )
+              })
+            }
+          </>
+          :
+          null
+        }
       </div>
-    </div>
+    </>
   );
 }
