@@ -3,11 +3,13 @@ import { useState, useEffect } from "react";
 import avatarFormatter from "../library/avatarFormatter";
 import UserListCard from "./UserListCard";
 
+const apiURL = String(import.meta.env.VITE_API_URL);
+
 export default function UserList() {
-  const [userList, setUserList] = useState<any[]>([]);
+  const [userList, setUserList] = useState<APIUserData[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/users")
+    fetch(`${apiURL}/api/users`)
       .then(x => x.json())
       .then((users) => { if (users.success) { return users.data } })
       .then((listOfUsers) => { setUserList(listOfUsers) });
@@ -15,17 +17,18 @@ export default function UserList() {
 
   return (
     <div>
-      {userList.toReversed().map((elem) => {
+      {userList.toReversed().map((elem: APIUserData) => {
 
-        let avatar = avatarFormatter(elem.avatar);
+        const avatar = avatarFormatter(elem.avatar);
 
         return (
-          <UserListCard handle={elem.handle}
-            avatar={avatar}
-            displayName={elem.display_name}
-            uuid={elem.uuid}
+          <UserListCard
             key={crypto.randomUUID()}
-            createdAt={elem.created_at}
+            handle={elem.handle}
+            avatar={avatar}
+            uuid={elem.uuid}
+            friend={false}
+            created_at={elem.created_at}
           />
         );
       })}

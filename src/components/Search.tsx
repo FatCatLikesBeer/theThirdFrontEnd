@@ -23,7 +23,13 @@ export default function Search() {
     let query: string | null = null;
     const q = queries.get("q");
     const user = queries.get("user");
-    if (q) { query = "search", value = q } else if (user) { query = "user", value = user };
+    if (q) {
+      query = "search";
+      value = q;
+    } else if (user) {
+      query = "user";
+      value = user;
+    }
     if (query) {
       try {
         (async function() {
@@ -34,7 +40,7 @@ export default function Search() {
           if (!json.success) { throw new Error(json.message) }
           setSearchResults([...json.data as PostListData[]]);
         })();
-      } catch (err: any) {
+      } catch (err: unknown) {
         toastRef?.current?.showToast(err.message, false);
       } finally {
         setEmptyResultPlaceholder("No Results Found");
@@ -54,7 +60,7 @@ export default function Search() {
       if (!results.ok) { throw new Error("Could not load posts") }
       if (!json.success) { throw new Error(json.message) }
       setSearchResults([...json.data as PostListData[]]);
-    } catch (err: any) {
+    } catch (err: unknown) {
       toastRef?.current?.showToast(err.message, false);
     } finally {
       setEmptyResultPlaceholder("No Results Found");

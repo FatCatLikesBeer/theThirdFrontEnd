@@ -3,12 +3,18 @@ import { Link } from "react-router";
 
 import dateFormatter from "../library/dateFormatter";
 
-export default function UserListCard(props: any) {
+export default function UserListCard(props: {
+  handle: string;
+  avatar: string;
+  uuid: string;
+  friend: boolean;
+  created_at: string;
+}) {
   const handle = props.handle;
   const avatar = props.avatar;
   const uuid = props.uuid;
   const friend = props.friend;
-  const createdAt = props.createdAt;
+  const createdAt = props.created_at;
 
   const displayDate = dateFormatter(createdAt);
 

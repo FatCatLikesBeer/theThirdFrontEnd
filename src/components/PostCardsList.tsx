@@ -75,7 +75,7 @@ export default function PostsListCard({
         }
         return !prev;
       });
-    } catch (err: any) {
+    } catch (err: Error) {
       toastRef?.current?.showToast(err.message, false);
     }
   }
@@ -94,7 +94,7 @@ export default function PostsListCard({
         if (!response.ok) { throw new Error("Request error") }
         if (!json.success) { throw new Error(json.message) }
         setCommentsList([...json.data?.reverse() as PostComments[]]);
-      } catch (err: any) {
+      } catch (err: Error) {
         console.error(err);
         toastRef?.current?.showToast(err.message, false);
       }

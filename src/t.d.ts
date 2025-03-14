@@ -62,6 +62,7 @@ type APIResponse<T> = {
 }
 
 type APIUserData = {
+  uuid: string,
   about: string,
   avatar: string,
   created_at: string,

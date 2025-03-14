@@ -48,7 +48,7 @@ export default function SideBar({
 
   // Auto close sidebar
   useEffect(() => {
-    function closeSidebar(_event: MouseEvent | Event) {
+    function closeSidebar() {
       setShowSidebar(false);
     }
 

@@ -76,8 +76,8 @@ export default function Friends() {
                   postContent={elem.content}
                   likeCount={elem.like_count}
                   commentCount={elem.comment_count}
+                  comments={elem.comments}
                   handleDelete={() => { }}
-                  setStateFunction={setFriendsPosts}
                   postLiked={elem.post_liked}
                 />
               );
@@ -86,14 +86,15 @@ export default function Friends() {
           :
           friendsList != null ?
             friendsList.toReversed().map((elem: FriendListData) => {
-              let avatar = avatarFormatter(elem.avatar);
+              const avatar = avatarFormatter(elem.avatar);
               return (
-                <UserListCard handle={elem.handle}
+                <UserListCard
+                  handle={elem.handle}
                   avatar={avatar}
                   uuid={elem.uuid}
                   key={crypto.randomUUID()}
                   friend={true}
-                  createdAt={elem.created_at}
+                  created_at={elem.created_at}
                 />
               );
             }) : <p>Nothing to see here</p>
@@ -114,7 +115,7 @@ async function getFriendsList(
     if (!result.ok) { throw new Error("Request error") }
     if (!json.success) { throw new Error(json.message) }
     functionResult = [...json.data as FriendListData[]];
-  } catch (err: any) {
+  } catch (err: Error) {
     toast?.current?.showToast(err.message, false);
   }
   return functionResult;
@@ -130,7 +131,7 @@ async function getFriendsPosts(
     if (!result.ok) { throw new Error("Request error") }
     if (!json.success) { throw new Error(json.message) }
     functionResult = [...json.data as PostListData[]];
-  } catch (err: any) {
+  } catch (err: Error) {
     toast?.current?.showToast(err.message, false);
   }
   return functionResult;

@@ -26,7 +26,7 @@ export default function UserDetail() {
   const [isFriend, setIsFriend] = useState(false);
   const trashModalRef = useContext(TrashModalContext) as React.RefObject<HTMLDialogElement>;
   const toastModalRef = useContext(ToastContext);
-  const { uuid } = useContext(AuthContext);
+  const [uuid] = useContext(AuthContext);
   const params = useParams();
 
   useEffect(() => {
@@ -139,7 +139,7 @@ export default function UserDetail() {
           isFriendParser(params.uuid, prunedFriendsList, setIsFriend);
           if (user) toastModalRef?.current?.showToast(`${user.handle} removed from friends list.`, true);
         }
-      } catch (err: any) {
+      } catch (err: Error) {
         console.error(err);
         toastModalRef?.current?.showToast(err.message, false);
       }
@@ -225,7 +225,7 @@ export default function UserDetail() {
                     commentCount={elem.comment_count}
                     handleDelete={handleDelete(elem.post_uuid)}
                     postLiked={elem.post_liked}
-                    setStateFunction={setPosts}
+                    comments={elem.comments}
                   />
                 );
               })

@@ -3,7 +3,7 @@ export default function PersonPlus({
   callBack = () => { },
 }: {
   size?: number,
-  callBack?: () => any;
+  callBack?: () => void;
 }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} fill="currentColor" className="bi bi-person-add" viewBox="0 0 16 16" onClick={callBack}>

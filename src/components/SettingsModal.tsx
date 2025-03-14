@@ -66,7 +66,7 @@ export default function SettingsModal() {
         toastRef?.current?.showToast("Avatar Updated!", true);
         editAvatarRef.current.close("avatar_updated");
       }
-    } catch (err: any) {
+    } catch (err: Error) {
       toastRef?.current?.showToast(err.message, false);
     }
   }
@@ -82,7 +82,7 @@ export default function SettingsModal() {
         editAvatarRef.current.close("avatar_default");
         toastRef?.current?.showToast("Avatar Default!", true);
       }
-    } catch (err: any) {
+    } catch (err: Error) {
       console.error(err);
       toastRef?.current?.showToast(err.message, false);
     }
