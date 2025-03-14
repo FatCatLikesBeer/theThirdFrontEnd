@@ -70,7 +70,7 @@ function App() {
 
 export default App;
 
-// TODO: Create comment input component
+// TODO: Create comment input component: Set a content length limit
 // TODO: Create comment display component
 
 // TODO: User list component: make it look good, get rid of underlines, add location

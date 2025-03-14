@@ -1,7 +1,8 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, CSSProperties } from 'react'
 import { Link } from 'react-router';
 
 import CommentsCard from './CommentsCard';
+import CommentsInput from './CommentsInput';
 
 import avatarFormatter from "../library/avatarFormatter";
 import dateFormatter from "../library/dateFormatter";
@@ -27,7 +28,6 @@ export default function PostsListCard({
   handleDelete,
   postLiked,
   comments,
-  setStateFunction,
 }: {
   userUUID: string;
   userHandle: string;
@@ -40,51 +40,41 @@ export default function PostsListCard({
   postLiked: boolean;
   handleDelete: () => void;
   comments: PostComments[];
-  setStateFunction: React.Dispatch<React.SetStateAction<PostListData[] | null>>;
 }) {
   const avatar = avatarFormatter(userAvatar);
   const date = dateFormatter(postTime);
   const toastRef = useContext(ToastContext);
-  const [showComments, setShowComments] = useState(true);
+  const [liked, setLiked] = useState(postLiked);
+  const [numberOfLikes, setNumberOfLikes] = useState<number>(likeCount || 0);
+  const [commentsList, setCommentsList] = useState<PostComments[]>([]);
+  const [numberOfComments, setNumberOfComments] = useState<number>(commentCount || 0);
+  const [showComments, setShowComments] = useState(false);
 
   async function handleLike() {
     const likesEndpoint = `${apiURL}/api/posts/${postUUID}/likes`;
     try {
-      if (postLiked) {
-        const result = await fetch(likesEndpoint, { method: "DELETE", credentials: "include" });
-        const json: APIResponse<null> = await result.json();
-        if (!result.ok) { throw new Error("Could not delete like") }
-        if (!json.success) { throw new Error(json.message) }
-        setStateFunction((prevValue) => {
-          if (prevValue) {
-            const newValue = prevValue.map(elem => {
-              return elem.post_uuid === postUUID ?
-                { ...elem, post_liked: false, like_count: elem.like_count - 1, }
-                : elem;
-            });
-            return newValue;
-          } else {
-            return prevValue;
-          }
-        });
-      } else {
-        const result = await fetch(likesEndpoint, { method: "POST", credentials: "include" });
-        const json: APIResponse<null> = await result.json();
-        if (!result.ok) { throw new Error("Could not like post") }
-        if (!json.success) { throw new Error(json.message) }
-        setStateFunction((prevValue) => {
-          if (prevValue) {
-            const newValue = prevValue.map(elem => {
-              return elem.post_uuid === postUUID ?
-                { ...elem, post_liked: true, like_count: elem.like_count + 1, }
-                : elem;
-            });
-            return newValue;
-          } else {
-            return prevValue;
-          }
-        });
-      }
+      setLiked((prev) => {
+        if (prev) {
+          fetch(likesEndpoint, { method: "DELETE", credentials: "include" })
+            .then(async (result) => {
+              const json: APIResponse<null> = await result.json();
+              if (!result.ok) { throw new Error("Could not delete like") }
+              if (!json.success) { throw new Error(json.message) }
+              setNumberOfLikes((prev) => { return prev - 1 });
+            })
+            .catch((err: Error) => { toastRef?.current?.showToast(err.message, false) });
+        } else {
+          fetch(likesEndpoint, { method: "POST", credentials: "include" })
+            .then(async (result) => {
+              const json: APIResponse<null> = await result.json();
+              if (!result.ok) { throw new Error("Could not like post") }
+              if (!json.success) { throw new Error(json.message) }
+              setNumberOfLikes((prev) => { return prev + 1 });
+            })
+            .catch((err: Error) => { toastRef?.current?.showToast(err.message, false) });
+        }
+        return !prev;
+      });
     } catch (err: any) {
       toastRef?.current?.showToast(err.message, false);
     }
@@ -95,6 +85,7 @@ export default function PostsListCard({
   }
 
   async function handleComment() {
+    setShowComments((prev) => { return !prev });
     if (comments.length <= 0) {
       const fetchCommentsAPI = `${apiURL}/api/posts/${postUUID}/comments`;
       try {
@@ -102,18 +93,41 @@ export default function PostsListCard({
         const json: APIResponse<PostComments[]> = await response.json();
         if (!response.ok) { throw new Error("Request error") }
         if (!json.success) { throw new Error(json.message) }
-        setStateFunction((prevValue) => {
-          let newValue = [...prevValue as PostListData[]];
-          newValue = newValue.map((elem) => {
-            return elem.post_uuid === postUUID ? { ...elem, comments: [...json.data as PostComments[]] } : elem;
-          });
-          return newValue;
-        });
+        setCommentsList([...json.data?.reverse() as PostComments[]]);
       } catch (err: any) {
+        console.error(err);
         toastRef?.current?.showToast(err.message, false);
       }
-    } else {
-      setShowComments(prev => !prev);
+    }
+  }
+
+  function handleCommentDelete(commentUUID: string): () => void {
+    return function() {
+      const method = "DELETE"
+      const apiEndoint = `${apiURL}/api/posts/${postUUID}/comments/${commentUUID}`;
+      fetch(apiEndoint, { credentials: "include", method: method })
+        .then((r) => {
+          if (r.ok) { return r.json() }
+          else { throw new Error("Unable to delete comment") }
+        })
+        .then((j: APIResponse<undefined>) => {
+          if (j.success) {
+            setNumberOfComments(prev => prev - 1);
+            setCommentsList((prev) => {
+              const newValue = prev.map((elem => {
+                return elem.comment_uuid === commentUUID ? null : elem;
+              })).filter((elem) => {
+                return elem != null;
+              });
+              return newValue;
+            });
+            toastRef?.current?.showToast("Comment Deleted", true);
+          }
+          else { throw new Error(j.message) }
+        })
+        .catch((err: Error) => {
+          toastRef?.current?.showToast(err.message, false);
+        });
     }
   }
 
@@ -137,32 +151,52 @@ export default function PostsListCard({
             </div>
             <ReactionPanel
               size={20}
-              likeCount={likeCount}
-              commentCount={commentCount}
-              likeFill={postLiked}
+              likeCount={numberOfLikes}
+              commentCount={numberOfComments}
+              likeFill={liked}
               likeCallback={handleLike}
               commentCallback={handleComment}
             />
           </div>
         </div>
-        {(comments.length > 0) && showComments
+        {showComments
           ?
-          <>
-            <p>Comment input element goes here</p>
+          <div style={commentContainer}>
+            <CommentsInput
+              setCommentsList={setCommentsList}
+              setNumberOfComments={setNumberOfComments}
+              postUUID={postUUID}
+            />
             {
-              comments.map(() => {
+              commentsList?.map((comment, i, arr) => {
                 return (
                   <CommentsCard
+                    commentObject={comment}
+                    index={i}
+                    arrayLength={arr.length}
                     key={crypto.randomUUID()}
+                    handleDelete={handleCommentDelete(comment.comment_uuid)}
                   />
                 )
               })
             }
-          </>
+          </div>
           :
           null
         }
       </div>
     </>
   );
+}
+
+const commentContainer: CSSProperties = {
+  borderLeft: "solid 1px var(--accent-color)",
+  borderRight: "solid 1px var(--accent-color)",
+  borderBottom: "solid 1px var(--accent-color)",
+  borderBottomLeftRadius: "8px",
+  borderBottomRightRadius: "8px",
+  margin: "0 auto",
+  padding: "8px",
+  maxWidth: "90%",
+  // minWidth: "80%",
 }

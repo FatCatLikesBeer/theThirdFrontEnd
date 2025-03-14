@@ -421,6 +421,7 @@ textarea:focus {
 
 .post-card-list-container {
   margin-bottom: 2rem;
+  margin-right: 2px;
 }
 
 .post-card-list-padding {
