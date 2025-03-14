@@ -18,6 +18,7 @@ import MyStuff from "./components/MyStuff.tsx";
 import Toast from "./components/Toast.tsx";
 import Search from "./components/Search.tsx";
 import Friends from "./components/Friends.tsx";
+import About from "./components/About.tsx"
 import { Route, Routes } from "react-router";
 
 import AuthModal from "./components/AuthModal.tsx";
@@ -56,6 +57,7 @@ function App() {
                     <Route path="/settings" element={<Settings />} />
                     <Route path="/search" element={<Search />} />
                     <Route path="/friends" element={<Friends />} />
+                    <Route path="/about" element={<About />} />
                     <Route path="/*" element={<PageNotFound />} />
                   </Routes>
                 </div>
@@ -70,12 +72,4 @@ function App() {
 
 export default App;
 
-// TODO: Create comment input component: Set a content length limit
-// TODO: Create comment display component
-
-// TODO: User list component: make it look good, get rid of underlines, add location
-// TODO: Commenting on posts should happen from home page
-// TODO: PageNotFound component should have a timer before it procs
-// TODO: figure out why you have a JWT in frontend // What the fuck does this mean?
-//
 // TODO: Swap R2 Bucket URL

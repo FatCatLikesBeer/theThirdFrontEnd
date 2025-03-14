@@ -109,10 +109,14 @@ export default function SideBar({
               <Link to="/friends"><p className="sidebar-element">Friends</p></Link>
               <Link to="/mystuff"><p className="sidebar-element">My Stuff</p></Link>
               <Link to="/settings"><p className="sidebar-element">Settings</p></Link>
+              <Link to="/about"><p className="sidebar-element">About</p></Link>
               <p className="pointer"><a onClick={logoutCallback}>Logout</a></p>
             </>
             :
-            <p className="pointer"><a onClick={loginSignupCallback}>Login/Signup</a></p>
+            <>
+              <Link to="/about"><p className="sidebar-element">About</p></Link>
+              <p className="pointer"><a onClick={loginSignupCallback}>Login/Signup</a></p>
+            </>
           }
         </div>
       }
