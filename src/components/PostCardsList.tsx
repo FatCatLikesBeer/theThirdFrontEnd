@@ -168,12 +168,10 @@ export default function PostsListCard({
               postUUID={postUUID}
             />
             {
-              commentsList?.map((comment, i, arr) => {
+              commentsList?.map((comment) => {
                 return (
                   <CommentsCard
                     commentObject={comment}
-                    index={i}
-                    arrayLength={arr.length}
                     key={crypto.randomUUID()}
                     handleDelete={handleCommentDelete(comment.comment_uuid)}
                   />
