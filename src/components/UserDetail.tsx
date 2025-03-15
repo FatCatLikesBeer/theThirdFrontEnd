@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router";
 
+import apiURLFetcher from "../library/apiURL";
 import dateFormatter from "../library/dateFormatter";
 import avatarFormatter from "../library/avatarFormatter";
 import PostsListCard from "./PostCardsList";
@@ -17,7 +18,7 @@ import TrashModalContext from "../context/TrashModalContext";
 import AuthContext from "../context/AuthContext";
 import ToastContext from "../context/ToastContext";
 
-const apiHost = String(import.meta.env.VITE_API_URL);
+const apiHost = apiURLFetcher();
 
 export default function UserDetail() {
   const [user, setUser] = useState<UserDetailData | null>(null);
@@ -26,7 +27,7 @@ export default function UserDetail() {
   const [isFriend, setIsFriend] = useState(false);
   const trashModalRef = useContext(TrashModalContext) as React.RefObject<HTMLDialogElement>;
   const toastModalRef = useContext(ToastContext);
-  const [uuid] = useContext(AuthContext);
+  const { uuid } = useContext(AuthContext);
   const params = useParams();
 
   useEffect(() => {
@@ -88,9 +89,8 @@ export default function UserDetail() {
           throw new Error(j.message);
         }
       })
-      .catch((err: Error) => {
+      .catch(() => {
         setFriendsList(null);
-        console.error(err.message);
       });
   }, []);
 
@@ -139,9 +139,12 @@ export default function UserDetail() {
           isFriendParser(params.uuid, prunedFriendsList, setIsFriend);
           if (user) toastModalRef?.current?.showToast(`${user.handle} removed from friends list.`, true);
         }
-      } catch (err: Error) {
-        console.error(err);
-        toastModalRef?.current?.showToast(err.message, false);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          toastModalRef?.current?.showToast(err.message, false);
+        } else {
+          toastModalRef?.current?.showToast("Error deleting from friends list", false);
+        }
       }
     } else {
       const method = "POST";
@@ -161,8 +164,12 @@ export default function UserDetail() {
             throw new Error(j.message);
           }
         })
-        .catch((err: Error) => {
-          toastModalRef?.current?.showToast(err.message, false);
+        .catch((err: unknown) => {
+          if (err instanceof Error) {
+            toastModalRef?.current?.showToast(err.message, false);
+          } else {
+            toastModalRef?.current?.showToast("Error deleting from friends list", false);
+          }
         });
     }
   }

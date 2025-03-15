@@ -6,6 +6,7 @@ import CommentsInput from './CommentsInput';
 
 import avatarFormatter from "../library/avatarFormatter";
 import dateFormatter from "../library/dateFormatter";
+import apiURLFetcher from '../library/apiURL';
 
 import ReactionPanel from './icons/ReactionPanel';
 import Trash from './icons/Trash';
@@ -14,7 +15,7 @@ import ToastContext from '../context/ToastContext';
 
 const contentLengthLimit = 150;
 const localUUID = String(localStorage.getItem('uuid'));
-const apiURL = String(import.meta.env.VITE_API_URL);
+const apiURL = apiURLFetcher();
 
 export default function PostsListCard({
   userUUID,
@@ -58,25 +59,41 @@ export default function PostsListCard({
           fetch(likesEndpoint, { method: "DELETE", credentials: "include" })
             .then(async (result) => {
               const json: APIResponse<null> = await result.json();
-              if (!result.ok) { throw new Error("Could not delete like") }
+              if (!result.ok) { throw new Error("Could not delete like [001]") }
               if (!json.success) { throw new Error(json.message) }
               setNumberOfLikes((prev) => { return prev - 1 });
             })
-            .catch((err: Error) => { toastRef?.current?.showToast(err.message, false) });
+            .catch((err: unknown) => {
+              if (err instanceof Error) {
+                toastRef?.current?.showToast(err.message, false);
+              } else {
+                toastRef?.current?.showToast("Could not delete like [002]", false);
+              }
+            });
         } else {
           fetch(likesEndpoint, { method: "POST", credentials: "include" })
             .then(async (result) => {
               const json: APIResponse<null> = await result.json();
-              if (!result.ok) { throw new Error("Could not like post") }
+              if (!result.ok) { throw new Error("Could not like post [001]") }
               if (!json.success) { throw new Error(json.message) }
               setNumberOfLikes((prev) => { return prev + 1 });
             })
-            .catch((err: Error) => { toastRef?.current?.showToast(err.message, false) });
+            .catch((err: unknown) => {
+              if (err instanceof Error) {
+                toastRef?.current?.showToast(err.message, false);
+              } else {
+                toastRef?.current?.showToast("Could not like post [002]", false);
+              }
+            });
         }
         return !prev;
       });
-    } catch (err: Error) {
-      toastRef?.current?.showToast(err.message, false);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toastRef?.current?.showToast(err.message, false);
+      } else {
+        toastRef?.current?.showToast("Could not like post [003]", false);
+      }
     }
   }
 
@@ -91,12 +108,15 @@ export default function PostsListCard({
       try {
         const response = await fetch(fetchCommentsAPI, { credentials: "include" });
         const json: APIResponse<PostComments[]> = await response.json();
-        if (!response.ok) { throw new Error("Request error") }
+        if (!response.ok) { throw new Error("Request error [001]") }
         if (!json.success) { throw new Error(json.message) }
         setCommentsList([...json.data?.reverse() as PostComments[]]);
-      } catch (err: Error) {
-        console.error(err);
-        toastRef?.current?.showToast(err.message, false);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          toastRef?.current?.showToast(err.message, false);
+        } else {
+          toastRef?.current?.showToast("Request error [002]", false);
+        }
       }
     }
   }
@@ -108,7 +128,7 @@ export default function PostsListCard({
       fetch(apiEndoint, { credentials: "include", method: method })
         .then((r) => {
           if (r.ok) { return r.json() }
-          else { throw new Error("Unable to delete comment") }
+          else { throw new Error("Unable to delete comment [001]") }
         })
         .then((j: APIResponse<undefined>) => {
           if (j.success) {
@@ -125,8 +145,12 @@ export default function PostsListCard({
           }
           else { throw new Error(j.message) }
         })
-        .catch((err: Error) => {
-          toastRef?.current?.showToast(err.message, false);
+        .catch((err: unknown) => {
+          if (err instanceof Error) {
+            toastRef?.current?.showToast(err.message, false);
+          } else {
+            toastRef?.current?.showToast("Unable to delete comment [002]", false);
+          }
         });
     }
   }

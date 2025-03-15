@@ -1,12 +1,13 @@
 import { useState, useContext, useEffect } from "react";
-
 import { useSearchParams } from "react-router";
 
 import PostsListCard from "./PostCardsList";
 
 import ToastContext from "../context/ToastContext";
 
-const apiURL = String(import.meta.env.VITE_API_URL);
+import apiURLFetcher from "../library/apiURL";
+
+const apiURL = apiURLFetcher();
 
 export default function Search() {
   const [emptyResultsPlaceholder, setEmptyResultPlaceholder] = useState("Search For Something");
@@ -36,12 +37,16 @@ export default function Search() {
           setTextInput(value as string);
           const results = await fetch(`${apiURL}/api/posts?${query}=${value}`, { credentials: "include" });
           const json: APIResponse<PostListData[]> = await results.json();
-          if (!results.ok) { throw new Error("Could not load posts") }
+          if (!results.ok) { throw new Error("Could not load posts [00201]") }
           if (!json.success) { throw new Error(json.message) }
           setSearchResults([...json.data as PostListData[]]);
         })();
       } catch (err: unknown) {
-        toastRef?.current?.showToast(err.message, false);
+        if (err instanceof Error) {
+          toastRef?.current?.showToast(err.message, false);
+        } else {
+          toastRef?.current?.showToast("Could not load posts: [98696]", false);
+        }
       } finally {
         setEmptyResultPlaceholder("No Results Found");
       }
@@ -57,11 +62,15 @@ export default function Search() {
 
       const results = await fetch(`${apiURL}/api/posts?${radio}=${textInput}`, { credentials: "include" });
       const json: APIResponse<PostListData[]> = await results.json();
-      if (!results.ok) { throw new Error("Could not load posts") }
+      if (!results.ok) { throw new Error("Could not load posts: [00021]") }
       if (!json.success) { throw new Error(json.message) }
       setSearchResults([...json.data as PostListData[]]);
     } catch (err: unknown) {
-      toastRef?.current?.showToast(err.message, false);
+      if (err instanceof Error) {
+        toastRef?.current?.showToast(err.message, false);
+      } else {
+        toastRef?.current?.showToast("Could not load posts: [11013]", false);
+      }
     } finally {
       setEmptyResultPlaceholder("No Results Found");
     }
@@ -107,8 +116,8 @@ export default function Search() {
                 likeCount={elem.like_count}
                 commentCount={elem.comment_count}
                 handleDelete={() => { }}
-                setStateFunction={setSearchResults}
                 postLiked={elem.post_liked}
+                comments={elem.comments}
               />
             );
           })

@@ -6,14 +6,17 @@ import PostsListCard from "./PostCardsList";
 import PostListDataContext from "../context/PostListDataContext";
 import TrashModalContext from "../context/TrashModalContext";
 
-const apiURL = String(import.meta.env.VITE_API_URL) + "/api/posts/";
+import apiURLFetcher from "../library/apiURL";
+
+const apiURL = apiURLFetcher() + "/api/posts/";
 
 export default function HomePagePosts() {
   const [posts, setPosts] = useState<PostListData[] | null>(null);
   const trashModalRef = useContext(TrashModalContext) as React.RefObject<HTMLDialogElement>;
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/posts", { credentials: "include" })
+    console.log(apiURL);
+    fetch(apiURL, { credentials: "include" })
       .then((response) => {
         if (response.ok) {
           return response.json();

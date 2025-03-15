@@ -3,7 +3,9 @@ import { useState, useContext } from "react";
 import AuthModalContext from "../../context/AuthModalContext";
 import SignupToken from "./SignupToken";
 
-const apiURL = String(import.meta.env.VITE_API_URL) + "/api/auth";
+import apiURLFetcher from "../../library/apiURL";
+
+const apiURL = apiURLFetcher() + "/api/auth";
 
 export default function SignupConfirmation({ email }: { email: string }) {
   const [disableConfirmButton, setDisableConfirmButton] = useState<boolean>(false);
@@ -37,7 +39,7 @@ export default function SignupConfirmation({ email }: { email: string }) {
   }
 
   function handleCancel() {
-    modalRef?.current.close();
+    modalRef?.current?.close();
   }
 
   return (

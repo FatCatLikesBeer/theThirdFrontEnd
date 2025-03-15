@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 
+import apiURLFetcher from "../library/apiURL";
 import avatarFormatter from "../library/avatarFormatter";
 import UserListCard from "./UserListCard";
 
-const apiURL = String(import.meta.env.VITE_API_URL);
+const apiURL = apiURLFetcher();
 
 export default function UserList() {
   const [userList, setUserList] = useState<APIUserData[]>([]);

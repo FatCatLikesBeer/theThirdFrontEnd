@@ -4,8 +4,10 @@ import { z } from "zod";
 import AuthModalContext from "../../context/AuthModalContext";
 import AuthContext from "../../context/AuthContext";
 
+import apiURLFetcher from "../../library/apiURL";
+
 const tokenSchema = z.string().length(6);
-const apiURL = String(import.meta.env.VITE_API_URL) + "/api/auth";
+const apiURL = apiURLFetcher() + "/api/auth";
 
 /**
  * LoginToken

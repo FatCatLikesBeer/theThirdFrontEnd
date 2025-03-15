@@ -3,8 +3,10 @@ import { useState, useEffect, useContext } from "react";
 
 import AuthModalContext from "../../context/AuthModalContext";
 
+import apiURLFetcher from "../../library/apiURL";
+
 const emailSchema = z.string().email();
-const apiURL = String(import.meta.env.VITE_API_URL) + "/api/auth";
+const apiURL = apiURLFetcher() + "/api/auth";
 
 /**
  * AuthEmailInput

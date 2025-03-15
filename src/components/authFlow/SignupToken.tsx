@@ -4,7 +4,9 @@ import { z } from "zod";
 import AuthModalContext from "../../context/AuthModalContext";
 import AuthContext from "../../context/AuthContext";
 
-const apiURL = String(import.meta.env.VITE_API_URL) + "/api/auth";
+import apiURLFetcher from "../../library/apiURL";
+
+const apiURL = apiURLFetcher() + "/api/auth";
 
 const tokenSchema = z.string().length(6);
 

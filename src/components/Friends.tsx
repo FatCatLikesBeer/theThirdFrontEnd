@@ -12,10 +12,11 @@ import AuthContext from "../context/AuthContext";
 import ToastContext from "../context/ToastContext";
 
 import avatarFormatter from "../library/avatarFormatter";
+import apiURLFetcher from "../library/apiURL";
 
 import type { ToastHandle } from "./Toast";
 
-const apiURL = String(import.meta.env.VITE_API_URL);
+const apiURL = apiURLFetcher();
 
 export default function Friends() {
   const { uuid } = useContext(AuthContext);
@@ -29,7 +30,7 @@ export default function Friends() {
   useEffect(() => {
     (async function() {
       setFriendsPosts(await getFriendsPosts(toast));
-      setFriendsList(await getFriendsList(uuid, toast));
+      setFriendsList(await getFriendsList(uuid as string, toast));
     })();
   }, []);
 
@@ -112,11 +113,15 @@ async function getFriendsList(
   try {
     const result = await fetch(`${apiURL}/api/friends/${uuid}`);
     const json: APIResponse<FriendListData[]> = await result.json();
-    if (!result.ok) { throw new Error("Request error") }
+    if (!result.ok) { throw new Error("Request error [001]") }
     if (!json.success) { throw new Error(json.message) }
     functionResult = [...json.data as FriendListData[]];
-  } catch (err: Error) {
-    toast?.current?.showToast(err.message, false);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      toast?.current?.showToast(err.message, false);
+    } else {
+      toast?.current?.showToast("Request error [002]", false);
+    }
   }
   return functionResult;
 }
@@ -128,11 +133,15 @@ async function getFriendsPosts(
   try {
     const result = await fetch(`${apiURL}/api/posts?friends=true`, { credentials: "include" });
     const json: APIResponse<PostListData[]> = await result.json();
-    if (!result.ok) { throw new Error("Request error") }
+    if (!result.ok) { throw new Error("Request error: [003]") }
     if (!json.success) { throw new Error(json.message) }
     functionResult = [...json.data as PostListData[]];
-  } catch (err: Error) {
-    toast?.current?.showToast(err.message, false);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      toast?.current?.showToast(err.message, false);
+    } else {
+      toast?.current?.showToast("Request error [004]", false);
+    }
   }
   return functionResult;
 }

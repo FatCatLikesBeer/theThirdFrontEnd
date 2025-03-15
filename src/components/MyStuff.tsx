@@ -5,7 +5,9 @@ import PostsListCard from "./PostCardsList";
 import ToastContext from "../context/ToastContext";
 import AuthContext from "../context/AuthContext";
 
-const apiURL = String(import.meta.env.VITE_API_URL);
+import apiURLFetcher from "../library/apiURL";
+
+const apiURL = apiURLFetcher();
 
 export default function MyStuff() {
   const [posts, setPosts] = useState<null | PostListData[]>(null);
@@ -42,10 +44,10 @@ export default function MyStuff() {
         .then((j: APIResponse<undefined>) => {
           if (j.success) {
             setPosts((prev) => {
-              const newValue = prev.map((elem) => {
+              const newValue = prev?.map((elem) => {
                 return elem.post_uuid != postUUID ? elem : null;
               }).filter((elem) => { return elem != null });
-              return newValue;
+              return newValue || prev;
             });
           } else { throw new Error(j.message) }
         })

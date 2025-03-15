@@ -12,8 +12,9 @@ import type { ToastHandle } from "./Toast";
 
 import avatarFormatter from "../library/avatarFormatter";
 import dateFormatter from "../library/dateFormatter";
+import apiURLfetcher from "../library/apiURL.ts";
 
-const apiURL = String(import.meta.env.VITE_API_URL);
+const apiURL = apiURLfetcher();
 
 const handleSchema = z.string()
   .max(24, "16 Character Max")

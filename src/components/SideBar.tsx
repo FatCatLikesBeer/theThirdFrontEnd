@@ -6,7 +6,9 @@ import AuthModalContext from "../context/AuthModalContext";
 
 import HamburgerMenuIcon from "./icons/HamburgerMenuIcon";
 
-const apiURL = String(import.meta.env.VITE_API_URL) + "/api";
+import apiURLFetcher from "../library/apiURL";
+
+const apiURL = apiURLFetcher() + "/api";
 
 export default function SideBar({
   appContentRef,

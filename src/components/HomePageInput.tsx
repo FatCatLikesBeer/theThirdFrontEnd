@@ -5,9 +5,10 @@ import PostListDataContext from "../context/PostListDataContext";
 import AuthContext from "../context/AuthContext";
 
 import writingPrompt from "../library/writingPrompt";
+import apiURLFetcher from "../library/apiURL";
 
 const textLimit = 400;
-const postUrl = String(import.meta.env.VITE_API_URL);
+const postUrl = apiURLFetcher();
 
 export default function HomePageInput() {
   const setPosts = useContext(PostListDataContext) as React.Dispatch<React.SetStateAction<PostListData[] | null>>;

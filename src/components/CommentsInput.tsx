@@ -4,9 +4,11 @@ import Send from "./icons/Send";
 
 import ToastContext from "../context/ToastContext";
 
+import apiURLFetcher from "../library/apiURL";
+
 const textLimit = 200;
 
-const apiURL = String(import.meta.env.VITE_API_URL);
+const apiURL = apiURLFetcher();
 
 export default function CommentsInput({
   postUUID,

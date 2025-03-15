@@ -10,7 +10,9 @@ import CloseIcon from "./icons/CloseIcon";
 import EditAvatarModalContext from "../context/EditAvatarModalContext.ts";
 import ToastContext from "../context/ToastContext.tsx";
 
-const apiURL = String(import.meta.env.VITE_API_URL);
+import apiURLFetcher from "../library/apiURL.ts";
+
+const apiURL = apiURLFetcher();
 
 export default function SettingsModal() {
   const [avatarFile, setAvatarFile] = useState<FileList>();
@@ -53,21 +55,27 @@ export default function SettingsModal() {
       const signedURLJSON: APIResponse<string> = await signedURLRequest.json();
       if (!signedURLJSON.success) { throw new Error(signedURLJSON.message) }
 
-      const sendFile = await fetch(String(signedURLJSON.data), {
-        cache: "reload",
-        method: "PUT",
-        body: avatarFile[0],
-        headers: { "Content-Type": avatarFile[0].type }
-      });
-      console.log("sendFile", sendFile);
-      if (!sendFile.ok) {
-        throw new Error("Upload Error")
-      } else {
-        toastRef?.current?.showToast("Avatar Updated!", true);
-        editAvatarRef.current.close("avatar_updated");
+      if (avatarFile != undefined) {
+        const sendFile = await fetch(String(signedURLJSON.data), {
+          cache: "reload",
+          method: "PUT",
+          body: avatarFile[0],
+          headers: { "Content-Type": avatarFile[0].type }
+        });
+        if (!sendFile.ok) {
+          throw new Error("Upload Error")
+        } else {
+          toastRef?.current?.showToast("Avatar Updated!", true);
+          editAvatarRef.current.close("avatar_updated");
+        }
+
       }
-    } catch (err: Error) {
-      toastRef?.current?.showToast(err.message, false);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toastRef?.current?.showToast(err.message, false);
+      } else {
+        toastRef?.current?.showToast("Upload Error", false);
+      }
     }
   }
 
@@ -77,14 +85,16 @@ export default function SettingsModal() {
         method: "PUT",
         credentials: "include",
       });
-      console.log(avatarDefault);
       if (avatarDefault.ok) {
         editAvatarRef.current.close("avatar_default");
         toastRef?.current?.showToast("Avatar Default!", true);
       }
-    } catch (err: Error) {
-      console.error(err);
-      toastRef?.current?.showToast(err.message, false);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toastRef?.current?.showToast(err.message, false);
+      } else {
+        toastRef?.current?.showToast("Upload Error", false);
+      }
     }
   }
 
