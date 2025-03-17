@@ -29,6 +29,7 @@ export default function PostsListCard({
   handleDelete,
   postLiked,
   comments,
+  showCommentsOnLoad = false,
 }: {
   userUUID: string;
   userHandle: string;
@@ -41,6 +42,7 @@ export default function PostsListCard({
   postLiked: boolean;
   handleDelete: () => void;
   comments: PostComments[];
+  showCommentsOnLoad?: boolean;
 }) {
   const avatar = avatarFormatter(userAvatar);
   const date = dateFormatter(postTime);
@@ -49,7 +51,7 @@ export default function PostsListCard({
   const [numberOfLikes, setNumberOfLikes] = useState<number>(likeCount || 0);
   const [commentsList, setCommentsList] = useState<PostComments[]>([]);
   const [numberOfComments, setNumberOfComments] = useState<number>(commentCount || 0);
-  const [showComments, setShowComments] = useState(false);
+  const [showComments, setShowComments] = useState(showCommentsOnLoad);
 
   async function handleLike() {
     const likesEndpoint = `${apiURL}/api/posts/${postUUID}/likes`;
@@ -180,6 +182,7 @@ export default function PostsListCard({
               likeFill={liked}
               likeCallback={handleLike}
               commentCallback={handleComment}
+              shareUUID={postUUID}
             />
           </div>
         </div>

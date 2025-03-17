@@ -186,6 +186,14 @@ textarea:focus {
 
 .reaction-comments {
   border: 1px solid var(--accent-color);
+  border-left: none;
+  border-right: none;
+  /*border-top-right-radius: var(--panel-min-height);*/
+  /*border-bottom-right-radius: var(--panel-min-height);*/
+}
+
+.reaction-share {
+  border: 1px solid var(--accent-color);
   border-left : none;
   border-top-right-radius: var(--panel-min-height);
   border-bottom-right-radius: var(--panel-min-height);
