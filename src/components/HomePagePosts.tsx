@@ -5,28 +5,39 @@ import PostsListCard from "./PostCardsList";
 
 import PostListDataContext from "../context/PostListDataContext";
 import TrashModalContext from "../context/TrashModalContext";
+import ToastContext from "../context/ToastContext";
 
 import apiURLFetcher from "../library/apiURL";
 
-const apiURL = apiURLFetcher() + "/api/posts/";
+const apiURL = apiURLFetcher() + "/api/posts";
 
 export default function HomePagePosts() {
   const [posts, setPosts] = useState<PostListData[] | null>(null);
   const trashModalRef = useContext(TrashModalContext) as React.RefObject<HTMLDialogElement>;
+  const toast = useContext(ToastContext);
 
   useEffect(() => {
-    console.log(apiURL);
-    fetch(apiURL, { credentials: "include" })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
+    (async function() {
+      try {
+        console.log("First Fetch: [91736]");
+        const r = await fetch("https://app.billlaaayyy.dev/api/posts", { credentials: "include" });
+        const j: APIResponse<PostListData[]> = await r.json();
+        if (!r.ok) {
+          console.error("Failed at request: [01638]");
+          throw new Error("Request Error: Could not request for posts: [16392]");
         }
-      })
-      .then((json) => {
-        if (json.success) {
-          setPosts([...json.data]);
+        if (!j.success) {
+          console.error("Failed at json: [01008]");
+          throw new Error(j.message + ": [01862]")
         }
-      });
+        setPosts([...j.data as PostListData[]]);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          console.error(err);
+          toast?.current?.showToast(err.message, false);
+        }
+      }
+    })();
   }, []);
 
   function handleDelete(postUUID: string) {
