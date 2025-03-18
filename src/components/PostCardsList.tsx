@@ -1,4 +1,4 @@
-import { useContext, useState, CSSProperties } from 'react'
+import { useContext, useState, CSSProperties, useEffect } from 'react'
 import { Link } from 'react-router';
 
 import CommentsCard from './CommentsCard';
@@ -52,6 +52,13 @@ export default function PostsListCard({
   const [commentsList, setCommentsList] = useState<PostComments[]>([]);
   const [numberOfComments, setNumberOfComments] = useState<number>(commentCount || 0);
   const [showComments, setShowComments] = useState(showCommentsOnLoad);
+
+  useEffect(() => {
+    if (showCommentsOnLoad) {
+      console.log(comments);
+      setCommentsList([...comments]);
+    }
+  }, []);
 
   async function handleLike() {
     const likesEndpoint = `${apiURL}/api/posts/${postUUID}/likes`;

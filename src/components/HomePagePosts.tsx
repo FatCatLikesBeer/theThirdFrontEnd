@@ -20,7 +20,7 @@ export default function HomePagePosts() {
     (async function() {
       try {
         console.log("First Fetch: [91736]");
-        const r = await fetch("https://app.billlaaayyy.dev/api/posts", { credentials: "include" });
+        const r = await fetch(apiURL, { credentials: "include" });
         const j: APIResponse<PostListData[]> = await r.json();
         if (!r.ok) {
           console.error("Failed at request: [01638]");
@@ -43,7 +43,7 @@ export default function HomePagePosts() {
   function handleDelete(postUUID: string) {
     return () => {
       const returnValueJSON = {
-        apiURL: apiURL + postUUID,
+        apiURL: apiURL + "/" + postUUID,
         postUUID: postUUID,
       }
       trashModalRef.current.returnValue = JSON.stringify(returnValueJSON);

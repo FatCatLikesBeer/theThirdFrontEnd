@@ -31,7 +31,7 @@ export default function PostDetail() {
           newPost.created_at = dateFormatter(newPost.created_at);
 
           newPost.comments = newPost.comments.map(elem => {
-            elem.created_at = dateFormatter(elem.avatar);
+            elem.created_at = dateFormatter(elem.created_at);
             return elem;
           });
 

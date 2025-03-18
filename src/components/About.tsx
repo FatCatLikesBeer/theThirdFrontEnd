@@ -3,7 +3,7 @@ export default function About() {
     <>
       <h1 className="page-title">About</h1>
       <p>This App was created as a final project for <a target="_blank" href="https://www.theodinproject.com">The Odin Project.</a></p>
-      <p>This was created by <a href="/users/85b1ab98108a9669bfbba01782caf09c">me, Billy.</a></p>
+      <p>This was created by <a href="/users/146d55d2e330c434d4670e621e3837e4">me, Billy.</a></p>
       <p>Technologies used:</p>
       <ul>
         <li>TypeScript</li>
