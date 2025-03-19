@@ -8,7 +8,7 @@ export default function About() {
       <p><a href="https://github.com/FatCatLikesBeer/theThirdBackEnd" target="_blank">GitHub: BackEnd</a></p>
       <p>Technologies used:</p>
       <ul>
-        <li><a href="https://www.typescript.org" target="_blank">TypeScript</a></li>
+        <li><a href="https://www.typescriptlang.org" target="_blank">TypeScript</a></li>
         <li><a href="https://nodejs.org" target="_blank">NodeJS</a></li>
         <li><a href="https://deno.land" target="_blank">Deno</a></li>
         <li><a href="https://turso.tech" target="_blank">Turso</a></li>
