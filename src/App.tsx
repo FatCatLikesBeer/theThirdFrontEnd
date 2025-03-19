@@ -72,6 +72,4 @@ function App() {
 
 export default App;
 
-// TODO: Create posts page
 // TODO: Detect URLS in content
-// TODO: Swap R2 Bucket URL
