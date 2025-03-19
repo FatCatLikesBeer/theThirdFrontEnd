@@ -1,12 +1,15 @@
 import { z } from "zod";
 import { useState, useEffect, useContext } from "react";
 
+import AuthContext from "../../context/AuthContext";
 import AuthModalContext from "../../context/AuthModalContext";
+import ToastContext from "../../context/ToastContext";
 
 import apiURLFetcher from "../../library/apiURL";
 
 const emailSchema = z.string().email();
 const apiURL = apiURLFetcher() + "/api/auth";
+const guestAPI = apiURLFetcher() + "/api/guest";
 
 /**
  * AuthEmailInput
@@ -25,6 +28,8 @@ export default function AuthEmailInput(
   const [emailInputHasBeenFocused, setEmailInputHasBeenFocused] = useState(false);
   const [submitHasBeenClicked, setSubmitHasBeenClicked] = useState(false);
   const emailValidation = emailSchema.safeParse(email);
+  const toast = useContext(ToastContext);
+  const { setUUID } = useContext(AuthContext);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setEmail(e.target.value);
@@ -62,6 +67,26 @@ export default function AuthEmailInput(
     });
   }, []);
 
+  async function signUpAsGuest() {
+    try {
+      const r = await fetch(guestAPI, { credentials: "include" });
+      const j: APIResponse<{ uuid: string }> = await r.json();
+      if (!r.ok) { throw new Error("Guest Signup Request Error") }
+      if (!j.success) { throw new Error(j.message) }
+
+      if (j.data != undefined) {
+        setUUID(j.data.uuid);
+        localStorage.setItem("uuid", j.data.uuid);
+      }
+      setEmail("");
+      modalRef.current.close();
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast?.current?.showToast(err.message, false);
+      }
+    }
+  }
+
   return (
     <div className="auth-login-signup-container">
       <h3 className="auth-form-title">Login or Signup</h3>
@@ -92,6 +117,13 @@ export default function AuthEmailInput(
             :
             "Submit"
         }</button>
+      <button
+        className="create-post-submit-button"
+        type="button"
+        onClick={signUpAsGuest}
+      >
+        Try as Guest
+      </button>
     </div>
   );
 }
