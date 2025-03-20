@@ -7,6 +7,7 @@ import CommentsInput from './CommentsInput';
 import avatarFormatter from "../library/avatarFormatter";
 import dateFormatter from "../library/dateFormatter";
 import apiURLFetcher from '../library/apiURL';
+import fetchImage from '../library/imagePostContentProcessor';
 
 import ReactionPanel from './icons/ReactionPanel';
 import Trash from './icons/Trash';
@@ -30,6 +31,7 @@ export default function PostsListCard({
   postLiked,
   comments,
   showCommentsOnLoad = false,
+  postObject,
 }: {
   userUUID: string;
   userHandle: string;
@@ -43,6 +45,7 @@ export default function PostsListCard({
   handleDelete: () => void;
   comments: PostComments[];
   showCommentsOnLoad?: boolean;
+  postObject?: PostListData;
 }) {
   const avatar = avatarFormatter(userAvatar);
   const date = dateFormatter(postTime);
@@ -179,9 +182,22 @@ export default function PostsListCard({
               </div>
               {localUUID === userUUID ? <Trash callBack={handleDelete} /> : null}
             </div>
-            <div className="post-content">
-              <p className={contentAsBlip(postContent) ? "blip" : ""} >{postContent}</p>
-            </div>
+            {"image" === postObject?.content_type
+              ?
+              <img
+                src={fetchImage(postObject)}
+                style={{
+                  marginTop: "12px",
+                  marginBottom: "12px",
+                  borderRadius: "15px",
+                  width: "100%",
+                }}
+              />
+              :
+              <div className="post-content">
+                <p className={contentAsBlip(postContent) ? "blip" : ""} >{postContent}</p>
+              </div>
+            }
             <ReactionPanel
               size={20}
               likeCount={numberOfLikes}

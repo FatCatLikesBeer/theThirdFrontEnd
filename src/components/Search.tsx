@@ -118,6 +118,7 @@ export default function Search() {
                 handleDelete={() => { }}
                 postLiked={elem.post_liked}
                 comments={elem.comments}
+                postObject={elem}
               />
             );
           })

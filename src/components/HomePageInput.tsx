@@ -65,7 +65,7 @@ export default function HomePageInput() {
             postUUID: mediaData?.postUUID,
             contentType: "image",
           }
-          const fetchDestination = encodeURI(`${postUrl}/api/posts?post=${queries.post}&postUUID=${queries.post}&contentType=${queries.contentType}`);
+          const fetchDestination = encodeURI(`${postUrl}/api/posts?post=${queries.post}&postUUID=${queries.postUUID}&contentType=${queries.contentType}`);
           const r = await fetch(fetchDestination, { credentials: "include", method: "POST" });
           const j = await r.json();
           if (!r.ok) { throw new Error("Could not post image, request error [HPI16836]") }

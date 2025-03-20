@@ -80,6 +80,7 @@ export default function Friends() {
                   comments={elem.comments}
                   handleDelete={() => { }}
                   postLiked={elem.post_liked}
+                  postObject={elem}
                 />
               );
             }) : <p>Nothing to see here</p>

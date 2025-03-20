@@ -94,6 +94,7 @@ export default function HomePagePosts() {
                 handleDelete={handleDelete(elem.post_uuid)}
                 comments={elem.comments}
                 postLiked={elem.post_liked}
+                postObject={elem}
               />
             );
           })

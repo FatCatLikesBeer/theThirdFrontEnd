@@ -77,6 +77,7 @@ export default function MyStuff() {
               commentCount={elem.comment_count}
               likeCount={elem.like_count}
               handleDelete={handleDelete(elem.post_uuid)}
+              postObject={elem}
             />
           );
         })
