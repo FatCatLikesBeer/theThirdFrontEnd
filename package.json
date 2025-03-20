@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.744.0",
+    "browser-image-compression": "^2.0.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router": "^7.1.5",

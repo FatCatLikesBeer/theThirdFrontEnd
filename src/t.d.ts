@@ -20,6 +20,7 @@ type PostListData = {
   post_uuid: string;
   user_uuid: string;
   post_liked: boolean;
+  content_type?: null | "text" | "link" | "image";
   comments: PostComments[];
 }
 
@@ -34,6 +35,7 @@ type PostDetailData = {
   post_uuid: string;
   user_uuid: string;
   post_liked: boolean;
+  content_type?: null | "text" | "link" | "image";
   comments: PostComments[];
 }
 
