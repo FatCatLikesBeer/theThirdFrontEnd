@@ -12,6 +12,7 @@ export default function About() {
         <li><a href="https://nodejs.org" target="_blank">NodeJS</a></li>
         <li><a href="https://deno.land" target="_blank">Deno</a></li>
         <li><a href="https://turso.tech" target="_blank">Turso</a></li>
+        <li><a href="https://fly.io/" target="_blank">Fly.io</a></li>
         <li><a href="https://www.sqlite.org" target="_blank">SQLite</a></li>
         <li><a href="https://react.dev" target="_blank">React</a></li>
         <li><a href="https://reactrouter.com/" target="_blank">React-Router</a></li>
