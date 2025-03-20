@@ -235,6 +235,7 @@ export default function UserDetail() {
                     handleDelete={handleDelete(elem.post_uuid)}
                     postLiked={elem.post_liked}
                     comments={elem.comments}
+                    postObject={elem}
                   />
                 );
               })
