@@ -10,6 +10,7 @@ import dateFormatter from "../library/dateFormatter";
 import apiURLFetcher from "../library/apiURL";
 
 export default function PostDetail() {
+  const [postNotFound, setPostNotFound] = useState(false);
   const [post, setPost] = useState<PostDetailData | null>(null);
   const postUUID = useParams().uuid;
   const toast = useContext(ToastContext);
@@ -22,6 +23,7 @@ export default function PostDetail() {
         if (response.ok) {
           return response.json();
         } else {
+          setPostNotFound(true);
           console.error(response);
         }
       })
@@ -37,6 +39,7 @@ export default function PostDetail() {
 
           setPost({ ...newPost });
         } else {
+          setPostNotFound(true);
           console.error(json);
         }
       });
@@ -60,24 +63,28 @@ export default function PostDetail() {
 
   return (
     <>
-      {post
+      {postNotFound
         ?
-        <PostsListCard
-          userUUID={post.user_uuid}
-          userHandle={post.handle}
-          userAvatar={post.avatar}
-          postUUID={post.post_uuid}
-          postTime={post.created_at}
-          postContent={post.content}
-          likeCount={post.like_count}
-          commentCount={post.comment_count}
-          handleDelete={handleDelete}
-          postLiked={post.post_liked}
-          comments={post.comments}
-          showCommentsOnLoad={true}
-        />
-        :
         <PageNotFound />
+        :
+        post
+          ?
+          <PostsListCard
+            userUUID={post.user_uuid}
+            userHandle={post.handle}
+            userAvatar={post.avatar}
+            postUUID={post.post_uuid}
+            postTime={post.created_at}
+            postContent={post.content}
+            likeCount={post.like_count}
+            commentCount={post.comment_count}
+            handleDelete={handleDelete}
+            postLiked={post.post_liked}
+            comments={post.comments}
+            showCommentsOnLoad={true}
+          />
+          :
+          null
       }
     </>
   )

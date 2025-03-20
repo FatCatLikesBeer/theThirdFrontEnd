@@ -21,6 +21,7 @@ import ToastContext from "../context/ToastContext";
 const apiHost = apiURLFetcher();
 
 export default function UserDetail() {
+  const [userNotFound, setUserNotFound] = useState(false);
   const [user, setUser] = useState<UserDetailData | null>(null);
   const [posts, setPosts] = useState<PostListData[] | null>(null);
   const [friendsList, setFriendsList] = useState<FriendListData[] | null>(null);
@@ -39,6 +40,7 @@ export default function UserDetail() {
           return response.json();
         } else {
           console.error(response);
+          setUserNotFound(true);
         }
       })
       .then((json) => {
@@ -49,6 +51,7 @@ export default function UserDetail() {
           setUser({ ...newUser });
         } else {
           console.error(json.message);
+          setUserNotFound(true);
         }
       });
 
@@ -70,7 +73,7 @@ export default function UserDetail() {
         }
       });
 
-    // Get Your friends list
+    // Get friends list
     const apiFriendsURL = `${apiHost}/api/friends/${uuid}`;
     fetch(apiFriendsURL, { credentials: "include" })
       .then(r => {
@@ -119,8 +122,7 @@ export default function UserDetail() {
     setIsFriend(match);
   }
 
-  async function toggleFriend(
-  ) {
+  async function toggleFriend() {
     const addDeleteFriendEndpoint = apiHost + "/api/friends";
     if (isFriend) {
       const method = "DELETE";
@@ -233,7 +235,6 @@ export default function UserDetail() {
                     handleDelete={handleDelete(elem.post_uuid)}
                     postLiked={elem.post_liked}
                     comments={elem.comments}
-                    postObject={elem}
                   />
                 );
               })
@@ -243,7 +244,7 @@ export default function UserDetail() {
           </div>
         </div>
         :
-        <UserNotFound />
+        userNotFound && <UserNotFound />
       }
     </>
   );
