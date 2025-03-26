@@ -3,6 +3,13 @@ import CircleCheck from "./icons/CircleCheck";
 import CircleX from "./icons/CircleX";
 
 export interface ToastHandle {
+  /**
+   * showToast
+   * @argument {string} message - Message to display
+   * @argument {boolean} success - Show a success or error message
+   * @description Call this method to display a toast containing
+   * passed `message` content with corresponding `success` color.
+   */
   showToast: (message: string, success: boolean) => void;
 }
 
@@ -12,15 +19,10 @@ export default function Toast() {
   const toastRef = useContext(ToastContext);
   const [message, setMessage] = useState<null | string>(null);
   const [isSuccess, setIsSuccess] = useState<boolean>(true);
-  const divRef = useRef<HTMLDivElement | null>(null);
+  const divRef = useRef<HTMLDivElement | null>(null); // Is this necessary to have?
 
   useImperativeHandle(toastRef, () => {
     return {
-      /**
-       * showToast
-       * @argument {string} message - Message to display
-       * @argument {boolean} success - Show a success or error message
-       */
       showToast: function(message: string, success: boolean) {
         setIsSuccess(success);
         setMessage(message);
